@@ -1,12 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-    <link rel="stylesheet" href="index.css">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bee-portal by JV</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <nav class="navbar navbar-expand-lg navbar-light bg-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="" class="navbar-brand" style="margin-right: 10px"
+            >bee-portal</a
+          >
+
+          <b
+            class="navbar-brand mb-0 pl-3"
+            style="border-left: 1px solid black; color: black"
+          >
+            Hello, user !</b
+          >
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <div class="nav-item dropdown active">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Menu
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="">Cart</a>
+
+                <a class="dropdown-item" href="">Manage Flower</a>
+                <a class="dropdown-item" href="">Manage Flower Type</a>
+                <a class="dropdown-item" href="">Manage Couriers</a>
+                <a class="dropdown-item" href="">Manage Users</a>
+                <a class="dropdown-item" href="">Transaction History</a>
+
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="">Profile</a>
+                <a class="dropdown-item" href="">Logout</a>
+              </div>
+            </div>
+
+            <li class="nav-item active">
+              <a class="nav-link" href="">Login</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="">Register</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="pt-3 pb-3">
+      <h1>Login</h1>
+      <hr />
+      <div class="w-50 m-auto">
+        <div class="form-group">
+          Email address
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            aria-describedby="emailHelp"
+            placeholder="example@mail.com"
+          />
+        </div>
+        <div class="form-group">
+          Password
+          <input
+            type="password"
+            name="password"
+            class="form-control"
+            placeholder="Password"
+          />
+        </div>
+        <div class="form-group form-check">
+          <input type="checkbox" name="remember_me" class="form-check-input" />
+          Remember me
+        </div>
+        <div class="d-flex flex-column justify-content-center">
+          <button id="submit-btn" type="submit" class="btn btn-outline-primary">
+            Login
+          </button>
+        </div>
+      </div>
+    </div>
+    <nav class="navbar navbar-light bg-default fixed-bottom">
+      <div class="container">
+        <div>© 2021 | JV</div>
+      </div>
+    </nav>
   </body>
+
+  <script type="module">
+    import {
+      collection,
+      query,
+      where,
+      getDocs,
+      getAuth,
+      // createUserWithEmailAndPassword,
+    } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
+    import { firebaseApp } from './script/firebase.js'
+    // import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+
+    // const auth = getAuth()
+    // createUserWithEmailAndPassword(auth, email, password)
+    //   .then((userCredential) => {
+    //     // Signed in
+    //     const user = userCredential.user
+    //     // ...
+    //   })
+    //   .catch((error) => {
+    //     const errorCode = error.code
+    //     const errorMessage = error.message
+    //     // ..
+    //   })
+  </script>
+
+  <script
+    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"
+  ></script>
 </html>
