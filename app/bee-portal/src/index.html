@@ -18,48 +18,8 @@
       <div class="container">
         <div class="navbar-header d-flex">
           <a href="" class="navbar-brand" style="margin-right: 30px"
-            >bee-portal</a
+            ><b>bee-<i>portal</i></b></a
           >
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul
-              class="navbar-nav mb-0 pl-3"
-              style="border-left: 1px solid black; color: black"
-            >
-              <div class="nav-item dropdown active">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Menu
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="">View All Classes</a>
-
-                  <a class="dropdown-item" href=""
-                    >View Attendance Information</a
-                  >
-                  <a class="dropdown-item" href="">View Score</a>
-
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="">Profile</a>
-                  <a class="dropdown-item" href="">Logout</a>
-                </div>
-              </div>
-
-              <li class="nav-item active">
-                <a class="nav-link" href="">Login</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <b class="navbar-nav ml-auto"> Hello, user !</b>
         </div>
       </div>
     </nav>
@@ -70,6 +30,7 @@
         <div class="form-group">
           Email address
           <input
+            id="email"
             type="email"
             name="email"
             class="form-control"
@@ -80,15 +41,12 @@
         <div class="form-group">
           Password
           <input
+            id="password"
             type="password"
             name="password"
             class="form-control"
             placeholder="Password"
           />
-        </div>
-        <div class="form-group form-check">
-          <input type="checkbox" name="remember_me" class="form-check-input" />
-          Remember me
         </div>
         <div class="d-flex flex-column justify-content-center">
           <button id="submit-btn" type="submit" class="btn btn-outline-primary">
@@ -104,34 +62,35 @@
     </nav>
   </body>
 
-  <!-- <script type="module">
-    import {
-      collection,
-      query,
-      where,
-      getDocs,
-      // createUserWithEmailAndPassword,
-    } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
-    import { firebaseApp } from './script/firebase.js'
+  <script type="module">
+    console.log(localStorage.getItem('currentUser'))
+    if (localStorage.getItem('currentUser')) {
+      window.location.assign('./home.html')
+    }
 
-    import { getStorage } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-storage.js'
+    import { User } from './script/model/user.js'
+    import { Database } from './script/database.js'
+    document
+      .getElementById('submit-btn')
+      .addEventListener('click', async () => {
+        console.log('masuk')
+        const u = await User.auth(
+          document.getElementById('email').value,
+          document.getElementById('password').value
+        )
+        if (u != null) {
+          Database.currentUser = u
+          console.log(Database.currentUser)
+          console.log(Database.currentUser.name)
 
-    getStorage(firebaseApp)
-    // import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
-
-    // const auth = getAuth()
-    // createUserWithEmailAndPassword(auth, email, password)
-    //   .then((userCredential) => {
-    //     // Signed in
-    //     const user = userCredential.user
-    //     // ...
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code
-    //     const errorMessage = error.message
-    //     // ..
-    //   })
-  </script> -->
+          localStorage.setItem('currentUser', u.userId)
+          console.log(localStorage.getItem('currentUser'))
+          window.location.assign('./home.html')
+        } else {
+          alert('Email or password is incorrect!')
+        }
+      })
+  </script>
   <script>
     window.jQuery = window.$ = require('jquery')
   </script>

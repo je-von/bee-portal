@@ -10,8 +10,12 @@ main {
 h1 {
   text-align: center;
 }
+hr {
+  margin-left: 0;
+  margin-right: 0;
+}
 .bg-default {
-  background-color: rgb(255, 239, 217);
+  background-color: #63c2de;
 }
 body {
   padding-bottom: 70px;
