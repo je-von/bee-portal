@@ -27,6 +27,11 @@ export const Database = (function () {
     db = getFirestore(firebaseApp)
 
     // seedUsers()
+
+    // const docRef = addDoc(collection(db, 'tes'), {
+    //   name: 'asd',
+    //   user: doc(Database.getDB(), 'users', '1Niqlyc6RCp2r83Sof7O'),
+    // })
   }
 
   function seedUsers() {
