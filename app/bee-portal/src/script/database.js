@@ -32,6 +32,30 @@ export const Database = (function () {
     //   name: 'asd',
     //   user: doc(Database.getDB(), 'users', '1Niqlyc6RCp2r83Sof7O'),
     // })
+
+    // const q = query(
+    //   collection(Database.getDB(), 'users'),
+    //   where('role', '==', 'Student'),
+    //   where('enrolledYear', '==', 2020)
+    // )
+
+    // const querySnapshot = await getDocs(q)
+    // if (!querySnapshot.empty) {
+    //   const users = []
+    //   querySnapshot.forEach((docSnap) => {
+    //     users.push(doc(Database.getDB(), 'users', docSnap.id))
+    //   })
+    //   const docRef = addDoc(collection(db, 'classes'), {
+    //     classCode: 'LQ01',
+    //     course: doc(Database.getDB(), 'courses', 'ISYS6169'),
+    //     students: users,
+    //     lecturer: doc(Database.getDB(), 'users', 'nFmiz3EKKU0w76tNjxO6'),
+    //     day: 5,
+    //     shift: 1,
+    //     runningPeriod: { year: 2021, semester: 'Odd' },
+    //   })
+    //   console.log('berhasil')
+    // }
   }
 
   function seedUsers() {

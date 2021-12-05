@@ -11,7 +11,7 @@
       integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="../index.css" />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-default">
@@ -37,9 +37,11 @@
                 >
                   Menu
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="">View All Classes</a>
-
+                <div
+                  id="menu-dropdown"
+                  class="dropdown-menu"
+                  aria-labelledby="navbarDropdown"
+                >
                   <a class="dropdown-item" href=""
                     >View Attendance Information</a
                   >
@@ -90,7 +92,7 @@
   </body>
 
   <script type="module">
-    import { UserController } from './script/controller/usercontroller.js'
+    import { UserController } from '../script/controller/usercontroller.js'
     window.onload = async () => {
       const u = await UserController.getInstance().getUserById(
         localStorage.getItem('currentUser')
@@ -100,6 +102,15 @@
         .appendChild(document.createTextNode(u.name))
 
       console.log(u.name)
+
+      if (u.role === 'Student') {
+        let a = document.createElement('a')
+        a.appendChild(document.createTextNode('View All Classes'))
+        a.setAttribute('href', './class/view.html')
+        a.setAttribute('class', 'dropdown-item')
+
+        document.getElementById('menu-dropdown').prepend(a)
+      }
     }
 
     document.getElementById('logout-btn').addEventListener('click', () => {

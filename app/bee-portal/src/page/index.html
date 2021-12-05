@@ -11,7 +11,7 @@
       integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="../index.css" />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-default">
@@ -68,7 +68,7 @@
       window.location.assign('./home.html')
     }
 
-    import { UserController } from './script/controller/usercontroller.js'
+    import { UserController } from '../script/controller/usercontroller.js'
     document.getElementById('submit-btn').addEventListener('click', () => {
       console.log('masuk')
       UserController.getInstance().auth(
