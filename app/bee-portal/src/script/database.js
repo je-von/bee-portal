@@ -73,6 +73,5 @@ export const Database = (function () {
 
       return db
     },
-    currentUser: null,
   }
 })()

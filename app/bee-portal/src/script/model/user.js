@@ -7,7 +7,7 @@ import {
   getDoc,
   getFirestore,
 } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
-import { Database } from '../database.js'
+import { Database } from '../Database.js'
 
 export class User {
   constructor(userId, email, password, name, role) {
@@ -35,13 +35,7 @@ export class User {
         const bcrypt = require('bcrypt-nodejs')
 
         if (bcrypt.compareSync(password, data.password)) {
-          u = new User(
-            doc.id,
-            data['email'],
-            data['password'],
-            data['name'],
-            data['role']
-          )
+          u = this.snapshotToUser(doc)
           console.log(u)
         }
       })
@@ -58,14 +52,85 @@ export class User {
     let u = null
     if (docSnap.exists()) {
       const data = docSnap.data()
-      u = new User(
-        docSnap.id,
+      u = this.snapshotToUser(docSnap)
+    }
+    return u
+  }
+
+  static async getAllByRole(role) {
+    const q = query(
+      collection(Database.getDB(), 'users'),
+      where('role', '==', role)
+    )
+
+    const querySnapshot = await getDocs(q)
+    const users = []
+    if (!querySnapshot.empty) {
+      querySnapshot.forEach((doc) => {
+        let u = this.snapshotToUser(doc)
+        users.push(u)
+      })
+    }
+    // console.log(users)
+    return users
+  }
+
+  static async getAll() {
+    const querySnapshot = await getDocs(collection(Database.getDB(), 'users'))
+    const users = []
+    if (!querySnapshot.empty) {
+      querySnapshot.forEach((doc) => {
+        let u = this.snapshotToUser(doc)
+        users.push(u)
+      })
+    }
+    // console.log(users)
+    return users
+  }
+
+  static snapshotToUser(doc) {
+    const data = doc.data()
+    if (data.role == 'Student') {
+      return new Student(
+        doc.id,
+        data['email'],
+        data['password'],
+        data['name'],
+        data['role'],
+        data['NIM'],
+        data['enrolledYear']
+      )
+    } else if (data.role == 'Lecturer') {
+      return new Lecturer(
+        doc.id,
+        data['email'],
+        data['password'],
+        data['name'],
+        data['role'],
+        data['lecturerCode']
+      )
+    } else {
+      return new User(
+        doc.id,
         data['email'],
         data['password'],
         data['name'],
         data['role']
       )
     }
-    return u
+  }
+}
+
+export class Student extends User {
+  constructor(userId, email, password, name, role, NIM, enrolledYear) {
+    super(userId, email, password, name, role)
+    this.NIM = NIM
+    this.enrolledYear = enrolledYear
+  }
+}
+export class Lecturer extends User {
+  constructor(userId, email, password, name, role, lecturerCode) {
+    super(userId, email, password, name, role)
+    this.lecturerCode = lecturerCode
   }
 }
