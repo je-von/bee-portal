@@ -21,8 +21,8 @@ export class User {
   static async auth(email, password) {
     const q = query(
       collection(Database.getDB(), 'users'),
-      where('email', '==', email),
-      where('password', '==', password)
+      where('email', '==', email)
+      //   where('password', '==', password)
     )
 
     const querySnapshot = await getDocs(q)
@@ -32,14 +32,18 @@ export class User {
       querySnapshot.forEach((doc) => {
         console.log(doc.id, ' => ', doc.data())
         const data = doc.data()
-        u = new User(
-          doc.id,
-          data['email'],
-          data['password'],
-          data['name'],
-          data['role']
-        )
-        console.log(u)
+        const bcrypt = require('bcrypt-nodejs')
+
+        if (bcrypt.compareSync(password, data.password)) {
+          u = new User(
+            doc.id,
+            data['email'],
+            data['password'],
+            data['name'],
+            data['role']
+          )
+          console.log(u)
+        }
       })
     }
 
@@ -63,21 +67,5 @@ export class User {
       )
     }
     return u
-    // if (!querySnapshot.empty) {
-    //   querySnapshot.forEach((doc) => {
-    //     console.log(doc.id, ' => ', doc.data())
-    //     const data = doc.data()
-    //     u = new User(
-    //       doc.id,
-    //       data['email'],
-    //       data['password'],
-    //       data['name'],
-    //       data['role']
-    //     )
-    //     console.log(u)
-    //   })
-    // }
-
-    // return u
   }
 }
