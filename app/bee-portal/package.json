@@ -47,6 +47,7 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "electron-squirrel-startup": "^1.0.0",
+    "jquery": "^3.6.0",
     "password-hash": "^1.2.2"
   },
   "devDependencies": {

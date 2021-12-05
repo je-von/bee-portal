@@ -7,8 +7,8 @@
     <title>bee-portal by JV</title>
     <link
       rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+      integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="index.css" />
@@ -16,55 +16,50 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-default">
       <div class="container">
-        <div class="navbar-header">
-          <a href="" class="navbar-brand" style="margin-right: 10px"
+        <div class="navbar-header d-flex">
+          <a href="" class="navbar-brand" style="margin-right: 30px"
             >bee-portal</a
           >
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul
+              class="navbar-nav mb-0 pl-3"
+              style="border-left: 1px solid black; color: black"
+            >
+              <div class="nav-item dropdown active">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Menu
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="">View All Classes</a>
 
-          <b
-            class="navbar-brand mb-0 pl-3"
-            style="border-left: 1px solid black; color: black"
-          >
-            Hello, user !</b
-          >
+                  <a class="dropdown-item" href=""
+                    >View Attendance Information</a
+                  >
+                  <a class="dropdown-item" href="">View Score</a>
+
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="">Profile</a>
+                  <a class="dropdown-item" href="">Logout</a>
+                </div>
+              </div>
+
+              <li class="nav-item active">
+                <a class="nav-link" href="">Login</a>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto">
-            <div class="nav-item dropdown active">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Menu
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="">Cart</a>
-
-                <a class="dropdown-item" href="">Manage Flower</a>
-                <a class="dropdown-item" href="">Manage Flower Type</a>
-                <a class="dropdown-item" href="">Manage Couriers</a>
-                <a class="dropdown-item" href="">Manage Users</a>
-                <a class="dropdown-item" href="">Transaction History</a>
-
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="">Profile</a>
-                <a class="dropdown-item" href="">Logout</a>
-              </div>
-            </div>
-
-            <li class="nav-item active">
-              <a class="nav-link" href="">Login</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="">Register</a>
-            </li>
-          </ul>
+          <b class="navbar-nav ml-auto"> Hello, user !</b>
         </div>
       </div>
     </nav>
@@ -109,16 +104,19 @@
     </nav>
   </body>
 
-  <script type="module">
+  <!-- <script type="module">
     import {
       collection,
       query,
       where,
       getDocs,
-      getAuth,
       // createUserWithEmailAndPassword,
     } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
     import { firebaseApp } from './script/firebase.js'
+
+    import { getStorage } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-storage.js'
+
+    getStorage(firebaseApp)
     // import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 
     // const auth = getAuth()
@@ -133,21 +131,18 @@
     //     const errorMessage = error.message
     //     // ..
     //   })
+  </script> -->
+  <script>
+    window.jQuery = window.$ = require('jquery')
   </script>
-
   <script
-    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"
   ></script>
   <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous"
-  ></script>
-  <script
-    src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
     crossorigin="anonymous"
   ></script>
 </html>
