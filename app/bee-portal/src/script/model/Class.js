@@ -47,29 +47,7 @@ export class Class {
       if (!querySnapshot.empty) {
         querySnapshot.forEach(async (doc) => {
           console.log(doc)
-          const data = doc.data()
-
-          //   const students = []
-          //   // data['students'].forEach(async (s) => {
-          //   //   students.push(await getDoc(s))
-          //   // })
-          //   data['students'].forEach((s) => {
-          //     students.push(s.id)
-          //   })
-          //   const course = await getDoc(data['course'])
-          //   const lecturer = await getDoc(data['lecturer'])
-          const c = new Class(
-            doc.id,
-            data['classCode'],
-            data['course'],
-            data['students'],
-            data['lecturer'],
-            data['day'],
-            data['shift'],
-            data['runningPeriod']
-          )
-          console.log('asd')
-          // console.log(x.data()['name'])
+          const c = this.snapshotToClass(doc)
           classes.push(c)
         })
       }
@@ -80,9 +58,35 @@ export class Class {
       return null
     }
   }
+  static async get(classId) {
+    const docRef = doc(Database.getDB(), 'classes', classId)
+    const docSnap = await getDoc(docRef)
 
-  static async convertCourse(data) {
-    const c = await getDoc(data)
+    let c = null
+    if (docSnap.exists()) {
+      c = this.snapshotToClass(docSnap)
+    }
+    return c
+  }
+
+  static snapshotToClass(doc) {
+    const data = doc.data()
+    const students = []
+    data['students'].forEach((s) => {
+      students.push(s.id)
+    })
+
+    const c = new Class(
+      doc.id,
+      data['classCode'],
+      data['course'].id,
+      students,
+      data['lecturer'].id,
+      data['day'],
+      data['shift'],
+      data['runningPeriod']
+    )
+
     return c
   }
 }

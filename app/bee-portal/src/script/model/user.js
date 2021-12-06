@@ -1,12 +1,4 @@
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc,
-  getFirestore,
-} from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
+import { collection, query, where, getDocs, doc, getDoc, getFirestore } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../Database.js'
 
 export class User {
@@ -58,10 +50,7 @@ export class User {
   }
 
   static async getAllByRole(role) {
-    const q = query(
-      collection(Database.getDB(), 'users'),
-      where('role', '==', role)
-    )
+    const q = query(collection(Database.getDB(), 'users'), where('role', '==', role))
 
     const querySnapshot = await getDocs(q)
     const users = []
@@ -91,41 +80,21 @@ export class User {
   static snapshotToUser(doc) {
     const data = doc.data()
     if (data.role == 'Student') {
-      return new Student(
-        doc.id,
-        data['email'],
-        data['password'],
-        data['name'],
-        data['role'],
-        data['NIM'],
-        data['enrolledYear']
-      )
+      return new Student(doc.id, data['email'], data['password'], data['name'], data['role'], data['NIM'], data['enrolledYear'], data['major'])
     } else if (data.role == 'Lecturer') {
-      return new Lecturer(
-        doc.id,
-        data['email'],
-        data['password'],
-        data['name'],
-        data['role'],
-        data['lecturerCode']
-      )
+      return new Lecturer(doc.id, data['email'], data['password'], data['name'], data['role'], data['lecturerCode'])
     } else {
-      return new User(
-        doc.id,
-        data['email'],
-        data['password'],
-        data['name'],
-        data['role']
-      )
+      return new User(doc.id, data['email'], data['password'], data['name'], data['role'])
     }
   }
 }
 
 export class Student extends User {
-  constructor(userId, email, password, name, role, NIM, enrolledYear) {
+  constructor(userId, email, password, name, role, NIM, enrolledYear, major) {
     super(userId, email, password, name, role)
     this.NIM = NIM
     this.enrolledYear = enrolledYear
+    this.major = major
   }
 }
 export class Lecturer extends User {

@@ -8,6 +8,7 @@ import {
   getDoc,
   addDoc,
   getFirestore,
+  updateDoc,
 } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 
 //Singleton
@@ -33,11 +34,19 @@ export const Database = (function () {
     //   user: doc(Database.getDB(), 'users', '1Niqlyc6RCp2r83Sof7O'),
     // })
 
-    // const q = query(
-    //   collection(Database.getDB(), 'users'),
-    //   where('role', '==', 'Student'),
-    //   where('enrolledYear', '==', 2020)
-    // )
+    // const q = query(collection(Database.getDB(), 'users'), where('role', '==', 'Student'))
+
+    // const querySnapshot = await getDocs(q)
+    // if (!querySnapshot.empty) {
+    //   let i = 1
+    //   querySnapshot.forEach((docSnap) => {
+    //     let major = ''
+    //     if (i % 2 == 0) major = 'Computer Science'
+    //     else major = 'Information System'
+    //     updateDoc(doc(Database.getDB(), 'users', docSnap.id), { major: major })
+    //     i++
+    //   })
+    // }
 
     // const querySnapshot = await getDocs(q)
     // if (!querySnapshot.empty) {
@@ -86,8 +95,7 @@ export const Database = (function () {
       const docRef = addDoc(collection(db, 'users'), {
         name: firstName + ' ' + lastName,
         password: hashedPassword,
-        email:
-          firstName.toLowerCase() + '.' + lastName.toLowerCase() + '@slc.edu', //.edu or .ac.id
+        email: firstName.toLowerCase() + '.' + lastName.toLowerCase() + '@slc.edu', //.edu or .ac.id
         role: 'Academic Department',
         // lecturerCode: 'D' + faker.datatype.number({ min: 1000, max: 9999 }),
         // enrolledYear: 2019, //2019 2020 2021

@@ -32,7 +32,7 @@ export const UserController = (function () {
   return {
     getInstance: function () {
       if (!instance) instance = create()
-      User.getAll()
+      // User.getAll()
 
       return instance
     },
