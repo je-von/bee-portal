@@ -2,6 +2,7 @@ import { ForumThread } from '../model/ForumThread.js'
 import { CourseController } from './coursecontroller.js'
 import { UserController } from './UserController.js'
 import { ClassController } from './ClassController.js'
+import { ForumReply } from '../model/ForumReply.js'
 //singleton
 export const ForumController = (function () {
   var instance
@@ -13,6 +14,10 @@ export const ForumController = (function () {
 
       getForumThread: function (id) {
         return ForumThread.get(id)
+      },
+
+      getAllForumReply: function (forumId) {
+        return ForumReply.getAll(forumId)
       },
 
       showForumDetailPage: async function (id) {
@@ -38,6 +43,21 @@ export const ForumController = (function () {
         clone.querySelector('#forum-content').textContent = forum.content
 
         clone.querySelector('#forum-date').textContent = new Date(forum.postDate.seconds * 1000).toLocaleString()
+
+        const replies = await this.getAllForumReply(id)
+        replies.forEach(async (r) => {
+          let replyContainer = clone.querySelector('#reply-container')
+          let replyTemplate = clone.querySelector('#reply-template')
+          let replyClone = replyTemplate.content.cloneNode(true)
+
+          const u = await UserController.getInstance().getUserById(r.userId)
+
+          replyClone.querySelector('#reply-user').textContent = u.name
+          replyClone.querySelector('#reply-date').textContent = new Date(r.replyDate.seconds * 1000).toLocaleString()
+          replyClone.querySelector('#reply-content').textContent = r.content
+
+          replyContainer.appendChild(replyClone)
+        })
 
         container.appendChild(clone)
         document.querySelector('#loading-spinner').remove()

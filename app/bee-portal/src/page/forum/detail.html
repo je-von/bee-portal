@@ -99,6 +99,34 @@
               <p id="forum-content">Content</p>
             </div>
           </div>
+
+          <div class="card mt-3" style="width: 90vw" id="reply-container">
+            <div class="card-body">
+              <div class="d-flex">
+                <i class="far fa-comments fa-2x mr-3"></i>
+                <div class="flex-fill">
+                  <textarea
+                    class="form-control mb-2"
+                    id="input-reply"
+                    style="resize: none; height: 150px"
+                    placeholder="Write a reply to this thread..."
+                  ></textarea>
+
+                  <button type="submit" class="btn btn-outline-success">Reply</button>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3">
+              <h4 class="text-center">Replies</h4>
+            </div>
+            <template id="reply-template">
+              <div class="p-3 border-top">
+                <b class="m-0" style="color: grey" id="reply-user">User</b>
+                <p class="m-0" style="color: grey; font-size: 12px" id="reply-date">Datetime</p>
+                <p class="mt-2 mb-0" style="color: black" id="reply-content">Content</p>
+              </div>
+            </template>
+          </div>
         </div>
       </template>
     </div>

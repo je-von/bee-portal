@@ -1,5 +1,5 @@
 import { collection, query, where, limit, getDocs, doc, getDoc, getFirestore } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
-import { Database } from '../Database.js'
+import { Database } from '../util/Database.js'
 
 export class Syllabus {
   constructor(syllabusId, courseCode, courseDescription, learningOutcomes, strategies, textbooks) {

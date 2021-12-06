@@ -1,5 +1,5 @@
 import { collection, query, where, limit, getDocs, doc, getDoc, getFirestore } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
-import { Database } from '../Database.js'
+import { Database } from '../util/Database.js'
 
 export class User {
   constructor(userId, email, password, name, role) {

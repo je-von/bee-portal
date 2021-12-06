@@ -8,7 +8,7 @@ import {
   getFirestore,
   DocumentReference,
 } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
-import { Database } from '../Database.js'
+import { Database } from '../util/Database.js'
 
 export class Class {
   constructor(classId, classCode, courseCode, studentIds, lecturerId, day, shift, runningPeriod) {

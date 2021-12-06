@@ -136,15 +136,18 @@
               </ul>
             </div>
             <div class="tab-pane fade pt-3" id="forum" role="tabpanel" aria-labelledby="forum-tab">
+              <a href="../forum/insert.html" class="btn btn-outline-success">Create New Post</a>
+              <hr class="mb-0" />
               <template id="forum-template">
-                <a href="" style="color: black; text-decoration: none" id="forum-link">
-                  <div>
-                    <b class="m-0" style="color: grey" id="forum-user">User</b>
-                    <p class="m-0" style="color: grey" id="forum-date">Datetime</p>
-                    <h5 class="mt-3" id="forum-title">Post Title</h5>
-                  </div>
-                  <hr />
-                </a>
+                <div>
+                  <a href="" id="forum-link" class="btn btn-outline-light w-100 text-left border-bottom pt-3 pb-3">
+                    <div>
+                      <b class="m-0" style="color: grey" id="forum-user">User</b>
+                      <p class="m-0" style="color: grey" id="forum-date">Datetime</p>
+                      <h5 class="mt-3" style="color: black" id="forum-title">Post Title</h5>
+                    </div>
+                  </a>
+                </div>
               </template>
             </div>
             <div class="tab-pane fade table-responsive" id="people" role="tabpanel" aria-labelledby="people-tab">
