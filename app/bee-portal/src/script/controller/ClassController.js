@@ -14,29 +14,23 @@ export const ClassController = (function () {
           const classes = await Class.getAllByStudentId(studentId)
           // console.log('selesai')
           console.log(classes)
-          classes.forEach(async (c) => {
-            let card = document.getElementById('card-template')
-            let container = document.getElementById('container')
-            const clone = card.content.cloneNode(true)
-
-            const course = await CourseController.getInstance().getCourseById(c.courseCode)
-
-            clone.querySelector('#course-name').textContent = course.name
-            clone.querySelector('#course-code').textContent = c.courseCode
-            clone.querySelector('#class-code').textContent = c.classCode
-            clone.querySelector('#running-period').textContent = c.runningPeriod.year + ', ' + c.runningPeriod.semester + ' Semester'
-
-            clone.querySelector('#detail-btn').setAttribute('href', './detail.html?id=' + c.classId)
-
-            container.appendChild(clone)
-
-            document.querySelector('#loading-spinner').remove()
-          })
+          return classes
         } catch (e) {
           console.log(e)
+          return []
         }
       },
-
+      getAllClassesByLecturer: async function (lecturerId) {
+        try {
+          const classes = await Class.getAllByLecturerId(lecturerId)
+          // console.log('selesai')
+          console.log(classes)
+          return classes
+        } catch (e) {
+          console.log(e)
+          return []
+        }
+      },
       getClassById: async function (classId) {
         const c = await Class.get(classId)
         return c

@@ -13,7 +13,7 @@ export class User {
   static async auth(email, password) {
     const q = query(
       collection(Database.getDB(), 'users'),
-      where('email', '==', email),
+      where('email', '==', email.toLowerCase()),
       limit(1)
       //   where('password', '==', password)
     )

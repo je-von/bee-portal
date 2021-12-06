@@ -27,6 +27,10 @@ export const Database = (function () {
     })
     db = getFirestore(firebaseApp)
 
+    // const bcrypt = require('bcrypt-nodejs')
+    // var salt = bcrypt.genSaltSync(10)
+    // const hash = bcrypt.hashSync('lebron123', salt)
+    // console.log(hash)
     // seedUsers()
 
     // const docRef = addDoc(collection(db, 'tes'), {
@@ -34,7 +38,7 @@ export const Database = (function () {
     //   user: doc(Database.getDB(), 'users', '1Niqlyc6RCp2r83Sof7O'),
     // })
 
-    // const q = query(collection(Database.getDB(), 'users'), where('role', '==', 'Student'))
+    // const q = query(collection(Database.getDB(), 'users'), where('enrolledYear', '==', 2020))
 
     // const querySnapshot = await getDocs(q)
     // if (!querySnapshot.empty) {
@@ -51,16 +55,18 @@ export const Database = (function () {
     // const querySnapshot = await getDocs(q)
     // if (!querySnapshot.empty) {
     //   const users = []
+    //   let i = 1
     //   querySnapshot.forEach((docSnap) => {
-    //     users.push(doc(Database.getDB(), 'users', docSnap.id))
+    //     if (i % 2 == 0 || i % 3 == 0) users.push(doc(Database.getDB(), 'users', docSnap.id))
+    //     i++
     //   })
     //   const docRef = addDoc(collection(db, 'classes'), {
-    //     classCode: 'LQ01',
-    //     course: doc(Database.getDB(), 'courses', 'ISYS6169'),
+    //     classCode: 'LP01',
+    //     course: doc(Database.getDB(), 'courses', 'CHAR6015'),
     //     students: users,
-    //     lecturer: doc(Database.getDB(), 'users', 'nFmiz3EKKU0w76tNjxO6'),
-    //     day: 5,
-    //     shift: 1,
+    //     lecturer: doc(Database.getDB(), 'users', 'VTzRIQwvIItl2MMTeJvj'),
+    //     day: 6,
+    //     shift: 3,
     //     runningPeriod: { year: 2021, semester: 'Odd' },
     //   })
     //   console.log('berhasil')

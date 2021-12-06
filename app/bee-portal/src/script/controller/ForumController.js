@@ -44,23 +44,51 @@ export const ForumController = (function () {
 
         clone.querySelector('#forum-date').textContent = new Date(forum.postDate.seconds * 1000).toLocaleString()
 
-        const replies = await this.getAllForumReply(id)
-        replies.forEach(async (r) => {
-          let replyContainer = clone.querySelector('#reply-container')
-          let replyTemplate = clone.querySelector('#reply-template')
-          let replyClone = replyTemplate.content.cloneNode(true)
+        if (!forum.isReplyHidden) {
+          const replies = await this.getAllForumReply(id)
+          replies.forEach(async (r) => {
+            let replyContainer = clone.querySelector('#reply-container')
+            let replyTemplate = clone.querySelector('#reply-template')
+            let replyClone = replyTemplate.content.cloneNode(true)
 
-          const u = await UserController.getInstance().getUserById(r.userId)
+            const u = await UserController.getInstance().getUserById(r.userId)
 
-          replyClone.querySelector('#reply-user').textContent = u.name
-          replyClone.querySelector('#reply-date').textContent = new Date(r.replyDate.seconds * 1000).toLocaleString()
-          replyClone.querySelector('#reply-content').textContent = r.content
+            replyClone.querySelector('#reply-user').textContent = u.name
+            if (u.role == 'Lecturer') replyClone.querySelector('#reply-user').textContent += ' • Lecturer'
+            replyClone.querySelector('#reply-date').textContent = new Date(r.replyDate.seconds * 1000).toLocaleString()
+            replyClone.querySelector('#reply-content').textContent = r.content
 
-          replyContainer.appendChild(replyClone)
-        })
+            replyContainer.appendChild(replyClone)
+          })
+        } else {
+          let i = document.createElement('i')
+          i.setAttribute('class', 'far fa-eye-slash mr-3')
+
+          clone.getElementById('reply-lbl').textContent = 'Replies to this thread are hidden.'
+          clone.getElementById('reply-lbl').prepend(i)
+        }
 
         container.appendChild(clone)
         document.querySelector('#loading-spinner').remove()
+      },
+
+      insertReply: async function (forumId, userId, content) {
+        if (content.length < 5) {
+          alert('Reply must be at least 5 characters!')
+          return
+        }
+        const r = new ForumReply('', forumId, userId, content)
+
+        const success = await r.insert()
+
+        if (success) {
+          alert('Reply Success!')
+          location.reload()
+        } else {
+          alert('Reply error!')
+        }
+
+        return success
       },
     }
   }

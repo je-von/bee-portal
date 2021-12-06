@@ -116,11 +116,35 @@
   <script type="module">
     import { UserController } from '../../script/controller/usercontroller.js'
     import { ClassController } from '../../script/controller/classcontroller.js'
+    import { CourseController } from '../../script/controller/coursecontroller.js'
+
     window.onload = async () => {
       try {
         const u = await UserController.getInstance().getUserById(localStorage.getItem('currentUser'))
         document.getElementById('welcome-txt').appendChild(document.createTextNode(u.name))
-        await ClassController.getInstance().getAllClassesByStudent(u.userId)
+
+        let classes = []
+        if (u.role === 'Student') classes = await ClassController.getInstance().getAllClassesByStudent(u.userId)
+        else if (u.role === 'Lecturer') classes = await ClassController.getInstance().getAllClassesByLecturer(u.userId)
+
+        classes.forEach(async (c) => {
+          let card = document.getElementById('card-template')
+          let container = document.getElementById('container')
+          const clone = card.content.cloneNode(true)
+
+          const course = await CourseController.getInstance().getCourseById(c.courseCode)
+
+          clone.querySelector('#course-name').textContent = course.name
+          clone.querySelector('#course-code').textContent = c.courseCode
+          clone.querySelector('#class-code').textContent = c.classCode
+          clone.querySelector('#running-period').textContent = c.runningPeriod.year + ', ' + c.runningPeriod.semester + ' Semester'
+
+          clone.querySelector('#detail-btn').setAttribute('href', './detail.html?id=' + c.classId)
+
+          container.appendChild(clone)
+
+          document.querySelector('#loading-spinner').remove()
+        })
       } catch (e) {
         console.log(e)
       }

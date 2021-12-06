@@ -42,6 +42,26 @@ export class Class {
       return null
     }
   }
+  static async getAllByLecturerId(lecturerId) {
+    try {
+      const q = query(collection(Database.getDB(), 'classes'), where('lecturer', '==', doc(Database.getDB(), 'users', lecturerId)))
+      console.log(q)
+      const querySnapshot = await getDocs(q)
+      const classes = []
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(async (doc) => {
+          console.log(doc)
+          const c = this.snapshotToClass(doc)
+          classes.push(c)
+        })
+      }
+
+      return classes
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
   static async get(classId) {
     const docRef = doc(Database.getDB(), 'classes', classId)
     const docSnap = await getDoc(docRef)

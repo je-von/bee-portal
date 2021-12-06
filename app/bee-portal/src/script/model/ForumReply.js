@@ -1,8 +1,19 @@
-import { collection, query, where, getDocs, doc, getDoc, orderBy, getFirestore } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  addDoc,
+  orderBy,
+  getFirestore,
+  Timestamp,
+} from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
 
 export class ForumReply {
-  constructor(replyId, forumId, userId, content, replyDate) {
+  constructor(replyId = '', forumId, userId, content, replyDate = Timestamp.now()) {
     this.replyId = replyId
     this.forumId = forumId
     this.userId = userId
@@ -13,7 +24,11 @@ export class ForumReply {
   static async getAll(forumId) {
     console.log(forumId)
     try {
-      const q = query(collection(Database.getDB(), 'forumreplies'), where('forumId', '==', doc(Database.getDB(), 'forumthreads', forumId)))
+      const q = query(
+        collection(Database.getDB(), 'forumreplies'),
+        where('forumId', '==', doc(Database.getDB(), 'forumthreads', forumId)),
+        orderBy('replyDate', 'desc')
+      )
       const querySnapshot = await getDocs(q)
       const replies = []
       console.log(querySnapshot.empty)
@@ -29,6 +44,23 @@ export class ForumReply {
     } catch (e) {
       console.log(e)
       return null
+    }
+  }
+
+  async insert() {
+    try {
+      const docRef = await addDoc(collection(Database.getDB(), 'forumreplies'), {
+        forumId: doc(Database.getDB(), 'forumthreads', this.forumId),
+        userId: doc(Database.getDB(), 'users', this.userId),
+        content: this.content,
+        replyDate: this.replyDate,
+      })
+      this.replyId = docRef.id
+      //   alert('berhasil')
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
     }
   }
 }
