@@ -11,16 +11,7 @@ import {
 import { Database } from '../Database.js'
 
 export class Class {
-  constructor(
-    classId,
-    classCode,
-    courseCode,
-    studentIds,
-    lecturerId,
-    day,
-    shift,
-    runningPeriod
-  ) {
+  constructor(classId, classCode, courseCode, studentIds, lecturerId, day, shift, runningPeriod) {
     this.classId = classId
     this.classCode = classCode
     this.courseCode = courseCode
@@ -33,14 +24,7 @@ export class Class {
 
   static async getAllByStudentId(studentId) {
     try {
-      const q = query(
-        collection(Database.getDB(), 'classes'),
-        where(
-          'students',
-          'array-contains',
-          doc(Database.getDB(), 'users', studentId)
-        )
-      )
+      const q = query(collection(Database.getDB(), 'classes'), where('students', 'array-contains', doc(Database.getDB(), 'users', studentId)))
       console.log(q)
       const querySnapshot = await getDocs(q)
       const classes = []

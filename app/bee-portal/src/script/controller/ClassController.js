@@ -1,6 +1,8 @@
 import { Class } from '../model/class.js'
 import { CourseController } from './coursecontroller.js'
 import { UserController } from './UserController.js'
+import { Syllabus } from '../model/Syllabus.js'
+
 //singleton
 export const ClassController = (function () {
   var instance
@@ -95,6 +97,35 @@ export const ClassController = (function () {
         })
 
         container.appendChild(clone)
+
+        const syllabus = await Syllabus.getAll(c.courseCode)
+        console.log(syllabus)
+
+        syllabus.forEach((s) => {
+          let syllabusContainer = document.getElementById('syllabus-container')
+
+          let row = document.getElementById('syllabus-template')
+
+          const rowClone = row.content.cloneNode(true)
+
+          rowClone.querySelector('#syllabus-session').textContent = 'Session ' + s.session
+          rowClone.querySelector('#syllabus-topic').textContent = s.courseOutline.topic
+
+          s.courseOutline.subtopic.forEach((st) => {
+            let subContainer = rowClone.getElementById('sub-container')
+            let list = rowClone.getElementById('sub-template')
+
+            console.log(subContainer)
+
+            const listClone = list.content.cloneNode(true)
+
+            listClone.querySelector('#subtopic').textContent = st
+
+            subContainer.appendChild(listClone)
+          })
+
+          syllabusContainer.appendChild(rowClone)
+        })
 
         document.querySelector('#loading-spinner').remove()
       },

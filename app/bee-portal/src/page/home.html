@@ -40,7 +40,11 @@
                 >
                   Menu
                 </a>
-                <div id="menu-dropdown" class="dropdown-menu" aria-labelledby="navbarDropdown"></div>
+                <div id="menu-dropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <template id="nav-template">
+                    <a href="" class="dropdown-item" id="nav-item"></a>
+                  </template>
+                </div>
               </div>
 
               <li class="nav-item active">
@@ -96,24 +100,49 @@
       let template = document.getElementById('dashboard-template')
       let container = document.getElementById('container')
 
-      const clone = template.content.cloneNode(true)
+      let clone = template.content.cloneNode(true)
       clone.querySelector('#name-lbl').textContent = u.name
       clone.querySelector('#role-lbl').textContent = u.role
       clone.querySelector('#email-lbl').textContent = u.email
 
       if (u.role === 'Student') {
-        let a = document.createElement('a')
-        a.appendChild(document.createTextNode('View All Classes'))
-        a.setAttribute('href', './class/view.html')
-        a.setAttribute('class', 'dropdown-item')
-
-        document.getElementById('menu-dropdown').prepend(a)
-
         clone.querySelector('#role-lbl').textContent = u.role + ' - ' + u.major
         clone.querySelector('#extras-lbl').textContent = u.NIM
       }
 
       container.appendChild(clone)
+
+      const routes = [
+        {
+          name: 'View All Classes',
+          link: './class/view.html',
+          roles: ['Student', 'Lecturer', 'Administrative Department'],
+        },
+        {
+          name: 'View All Courses',
+          link: '',
+          roles: ['Academic Department'],
+        },
+        {
+          name: 'View Score',
+          link: '',
+          roles: ['Student', 'Lecturer', 'Scoring Department'],
+        },
+      ]
+
+      template = document.getElementById('nav-template')
+      container = document.getElementById('menu-dropdown')
+
+      routes.forEach((r) => {
+        if (r.roles.includes(u.role)) {
+          clone = template.content.cloneNode(true)
+          let a = clone.querySelector('#nav-item')
+          console.log(a)
+          a.textContent = r.name
+          a.setAttribute('href', r.link)
+          container.appendChild(a)
+        }
+      })
 
       document.querySelector('#loading-spinner').remove()
     }
