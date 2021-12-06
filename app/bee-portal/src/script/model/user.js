@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs, doc, getDoc, getFirestore } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
+import { collection, query, where, limit, getDocs, doc, getDoc, getFirestore } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../Database.js'
 
 export class User {
@@ -13,7 +13,8 @@ export class User {
   static async auth(email, password) {
     const q = query(
       collection(Database.getDB(), 'users'),
-      where('email', '==', email)
+      where('email', '==', email),
+      limit(1)
       //   where('password', '==', password)
     )
 
@@ -37,7 +38,7 @@ export class User {
   }
 
   static async getById(id) {
-    console.log(id)
+    // console.log(id)
     const docRef = doc(Database.getDB(), 'users', id)
     const docSnap = await getDoc(docRef)
 

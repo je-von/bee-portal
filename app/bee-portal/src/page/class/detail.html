@@ -83,13 +83,15 @@
       <template id="template">
         <div class="d-flex align-items-center flex-column">
           <h2 id="course-name">Course Code - Course Name</h2>
-          <h4>
+          <h4 class="m-0">
             <i class="fas fa-users mr-3"></i>
             <label id="class-code">Class Code</label>
           </h4>
+          <p class="m-0"><i class="fas fa-newspaper mr-3"></i><label id="course-credits"></label></p>
+          <p class="m-0"><i class="far fa-calendar-alt mr-3"></i><label id="class-schedule"></label></p>
         </div>
 
-        <div class="m-5">
+        <div class="ml-5 mr-5">
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
               <a class="nav-link active" id="syllabus-tab" data-toggle="tab" href="#syllabus" role="tab" aria-controls="syllabus" aria-selected="true"
@@ -114,32 +116,36 @@
           </ul>
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="syllabus" role="tabpanel" aria-labelledby="syllabus-tab">
-              <table class="table">
-                <thead class="thead-light">
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Course Outline</th>
-                  </tr>
-                </thead>
-                <tbody id="syllabus-container">
-                  <template id="syllabus-template">
-                    <tr>
-                      <th scope="row" id="syllabus-session">1</th>
-                      <td id="syllabus-co">
-                        <p style="font-size: 20px" id="syllabus-topic">Topic</p>
-                        <b>Sub Topic</b>
-                        <ul id="sub-container">
-                          <template id="sub-template">
-                            <li id="subtopic">asd</li>
-                          </template>
-                        </ul>
-                      </td>
-                    </tr>
-                  </template>
-                </tbody>
-              </table>
+              <h5 class="mt-3">Course Description</h5>
+              <p id="course-desc"></p>
+              <hr />
+              <h5>Learning Outcomes</h5>
+              <ul id="lo-container">
+                <template id="lo-template"><li id="list">asd</li></template>
+              </ul>
+              <hr />
+              <h5>Teaching & Learning Strategies</h5>
+              <ul id="strategies-container">
+                <template id="strategies-template"><li id="list">asd</li></template>
+              </ul>
+              <hr />
+              <h5>Textbooks</h5>
+              <ul id="textbooks-container">
+                <template id="textbooks-template"><li id="list">asd</li></template>
+              </ul>
             </div>
-            <div class="tab-pane fade" id="forum" role="tabpanel" aria-labelledby="forum-tab">asd</div>
+            <div class="tab-pane fade pt-3" id="forum" role="tabpanel" aria-labelledby="forum-tab">
+              <template id="forum-template">
+                <a href="" style="color: black; text-decoration: none" id="forum-link">
+                  <div>
+                    <b class="m-0" style="color: grey" id="forum-user">User</b>
+                    <p class="m-0" style="color: grey" id="forum-date">Datetime</p>
+                    <h5 class="mt-3" id="forum-title">Post Title</h5>
+                  </div>
+                  <hr />
+                </a>
+              </template>
+            </div>
             <div class="tab-pane fade table-responsive" id="people" role="tabpanel" aria-labelledby="people-tab">
               <h5>Lecturer</h5>
               <p id="lecturer-name">Name</p>
@@ -168,7 +174,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="tab-pane fade" id="attendance" role="tabpanel" aria-labelledby="attendance-tab">qwer</div>
+            <div class="tab-pane fade" id="attendance" role="tabpanel" aria-labelledby="attendance-tab">asd</div>
           </div>
         </div>
       </template>
