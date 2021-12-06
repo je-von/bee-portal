@@ -71,6 +71,10 @@ export const ClassController = (function () {
         clone.querySelector('#course-name').textContent = c.courseCode + ' - ' + course.name
         clone.querySelector('#class-code').textContent = c.classCode
 
+        const lecturer = await UserController.getInstance().getUserById(c.lecturerId)
+
+        clone.querySelector('#lecturer-name').textContent = lecturer.lecturerCode + ' - ' + lecturer.name
+
         let i = 1
         c.studentIds.forEach(async (s) => {
           const student = await UserController.getInstance().getUserById(s)
