@@ -112,6 +112,8 @@ export const ClassController = (function () {
           forumClone.querySelector('#forum-user').textContent = user.name
           if (user.role == 'Lecturer') forumClone.querySelector('#forum-user').textContent += ' • Lecturer'
 
+          forumClone.querySelector('#forum-link').setAttribute('href', '../forum/detail.html?id=' + f.forumId)
+
           forumContainer.appendChild(forumClone)
         })
 
