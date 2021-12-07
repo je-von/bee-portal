@@ -48,7 +48,7 @@ export const ClassController = (function () {
         clone.querySelector('#class-code').textContent = c.classCode
         clone.querySelector('#course-credits').textContent = course.creditsPerSemester + ' Credits'
 
-        clone.querySelector('#class-schedule').textContent = getSchedule(c.day, c.shift)
+        clone.querySelector('#class-schedule').textContent = getSchedule(c.schedule.day, c.schedule.shift)
 
         const lecturer = await UserController.getInstance().getUserById(c.lecturerId)
 

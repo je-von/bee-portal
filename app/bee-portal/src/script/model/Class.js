@@ -11,14 +11,13 @@ import {
 import { Database } from '../util/Database.js'
 
 export class Class {
-  constructor(classId, classCode, courseCode, studentIds, lecturerId, day, shift, runningPeriod) {
+  constructor(classId, classCode, courseCode, studentIds, lecturerId, schedule, runningPeriod) {
     this.classId = classId
     this.classCode = classCode
     this.courseCode = courseCode
     this.studentIds = studentIds
     this.lecturerId = lecturerId
-    this.day = day
-    this.shift = shift
+    this.schedule = schedule
     this.runningPeriod = runningPeriod
   }
 
@@ -80,16 +79,7 @@ export class Class {
       students.push(s.id)
     })
 
-    const c = new Class(
-      doc.id,
-      data['classCode'],
-      data['course'].id,
-      students,
-      data['lecturer'].id,
-      data['day'],
-      data['shift'],
-      data['runningPeriod']
-    )
+    const c = new Class(doc.id, data['classCode'], data['course'].id, students, data['lecturer'].id, data['schedule'], data['runningPeriod'])
 
     return c
   }
