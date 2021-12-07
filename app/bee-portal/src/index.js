@@ -21,7 +21,7 @@ const createWindow = () => {
   mainWindow.loadFile(path.join(__dirname, './page/index.html'))
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   mainWindow.setResizable(false)
 }
@@ -48,8 +48,8 @@ app.on('activate', () => {
     createWindow()
   }
 })
-let trayIcon = null
 
+let trayIcon = null
 app.on('ready', () => {
   // if (trayIcon) return mainWindow.hide()
   trayIcon = new Tray(path.join('', './src/logo/bee.png'))
@@ -95,30 +95,3 @@ app.on('ready', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-// app.whenReady().then(() => {
-//   let trayIcon = new Tray(path.join('', './src/logo/bee.png'))
-
-//   const template = [
-//     {
-//       label: 'bee-portal by JV',
-//       enabled: false,
-//     },
-
-//     {
-//       label: 'Open',
-//       click: function () {
-//         mainWindow.show()
-//       },
-//     },
-//     {
-//       label: 'Exit',
-//       click: function () {
-//         app.quit()
-//       },
-//     },
-//   ]
-
-//   let trayMenu = Menu.buildFromTemplate(template)
-//   trayIcon.setContextMenu(trayMenu)
-//   trayIcon.setToolTip('bee-portal')
-// })
