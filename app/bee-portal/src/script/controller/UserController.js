@@ -1,5 +1,5 @@
 import { User } from '../model/user.js'
-
+import { dialogs } from '../util/Utility.js'
 //singleton
 export const UserController = (function () {
   var instance
@@ -7,7 +7,7 @@ export const UserController = (function () {
     return {
       auth: async function (email, password) {
         if (!email || !password) {
-          alert('Email and password must be filled!')
+          dialogs.alert('Email and password must be filled!')
           return
         }
 
@@ -17,7 +17,7 @@ export const UserController = (function () {
           console.log(localStorage.getItem('currentUser'))
           window.location.assign('./home.html')
         } else {
-          alert('Email or password is incorrect!')
+          dialogs.alert('Email or password is incorrect!')
         }
       },
 

@@ -24,7 +24,7 @@
       <div class="container">
         <div class="navbar-header d-flex">
           <a href="../home.html" class="navbar-brand" style="margin-right: 30px"
-            ><b>bee-<i>portal</i></b></a
+            ><i class="fab fa-forumbee mr-2" style="color: #ffdd00"></i><b>bee-<i>portal</i></b></a
           >
           <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul
@@ -78,46 +78,45 @@
           <span class="sr-only">Loading...</span>
         </div>
       </div>
-      <!-- <template id="forum-template"> -->
-      <button class="btn btn-outline-secondary ml-3 back-button" onclick="history.back()">&#8249;</button>
-      <div class="d-flex align-items-center flex-column">
-        <h2>Create New Post</h2>
-        <h4 class="m-0">
-          <label id="course-name">Course Code - Course Name</label>
-        </h4>
-        <h4 class="m-0">
-          <i class="fas fa-users mr-3"></i>
-          <label id="class-code">Class Code</label>
-        </h4>
-
-        <div class="card mt-3" style="width: 90vw" id="reply-container">
-          <div class="card-body">
-            <div class="d-flex">
-              <i class="far fa-comments fa-2x mr-3"></i>
-              <div class="flex-fill">
-                <div class="input-group mb-2">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="">Title</span>
+      <template id="forum-template">
+        <button class="btn btn-outline-secondary ml-3 back-button" onclick="history.back()">&#8249;</button>
+        <div class="d-flex align-items-center flex-column">
+          <h2>Create New Post</h2>
+          <h4 class="m-0">
+            <label id="course-name">Course Code - Course Name</label>
+          </h4>
+          <h4 class="m-0">
+            <i class="fas fa-users mr-3"></i>
+            <label id="class-code">Class Code</label>
+          </h4>
+          <div class="card mt-3" style="width: 90vw" id="reply-container">
+            <div class="card-body">
+              <div class="d-flex">
+                <i class="far fa-comments fa-2x mr-3"></i>
+                <div class="flex-fill">
+                  <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="">Title</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Write title here..." id="forum-title" />
                   </div>
-                  <input type="text" class="form-control" placeholder="Write title here..." id="forum-title" />
+                  <textarea
+                    class="form-control mb-2"
+                    id="forum-content"
+                    style="resize: none; height: 180px"
+                    placeholder="Write something..."
+                  ></textarea>
+                  <div class="form-check mb-2">
+                    <input type="checkbox" class="form-check-input" id="forum-hide-check" />
+                    <label class="form-check-label" for="check">Hide Replies to This Thread </label>
+                  </div>
+                  <button type="submit" class="btn btn-outline-success" id="post-btn">Post</button>
                 </div>
-                <textarea
-                  class="form-control mb-2"
-                  id="forum-content"
-                  style="resize: none; height: 180px"
-                  placeholder="Write something..."
-                ></textarea>
-                <div class="form-check mb-2">
-                  <input type="checkbox" class="form-check-input" id="forum-hide-check" />
-                  <label class="form-check-label" for="check">Hide Replies to This Thread </label>
-                </div>
-                <button type="submit" class="btn btn-outline-success" id="post-btn">Post</button>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- </template> -->
+      </template>
     </div>
     <nav class="navbar navbar-light bg-default fixed-bottom">
       <div class="container">
@@ -134,14 +133,23 @@
       try {
         const u = await UserController.getInstance().getUserById(localStorage.getItem('currentUser'))
         document.getElementById('welcome-txt').appendChild(document.createTextNode(u.name))
-        const forumId = new URLSearchParams(window.location.search).get('id')
+        const classId = new URLSearchParams(window.location.search).get('id')
+        console.log(classId)
+
+        await ForumController.getInstance().showInsertForumPage(classId)
         // await ForumController.getInstance().showForumDetailPage(forumId)
 
-        // document.getElementById('reply-btn').addEventListener('click', async () => {
-        //   console.log('klik')
-        //   const r = await ForumController.getInstance().insertReply(forumId, u.userId, document.getElementById('input-reply').value)
-        //   console.log(r)
-        // })
+        document.getElementById('post-btn').addEventListener('click', async () => {
+          console.log('klik')
+          const f = await ForumController.getInstance().insertForumThread(
+            classId,
+            u.userId,
+            document.getElementById('forum-title').value,
+            document.getElementById('forum-content').value,
+            document.getElementById('forum-hide-check').checked
+          )
+          console.log(f)
+        })
       } catch (e) {
         console.log(e)
       }

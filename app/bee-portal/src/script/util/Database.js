@@ -15,7 +15,7 @@ import {
 export const Database = (function () {
   var db
 
-  async function create() {
+  function create() {
     const firebaseApp = initializeApp({
       apiKey: 'AIzaSyCfP4MYBzuwRNNb_aBjE8zGxDFfex86upk',
       authDomain: 'bee-portal-jv.firebaseapp.com',

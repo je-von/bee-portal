@@ -91,6 +91,8 @@ export const ClassController = (function () {
           })
         }
         //forum tab
+        clone.querySelector('#create-forum-btn').setAttribute('href', '../forum/insert.html?id=' + classId)
+
         const forums = await ForumController.getInstance().getAllForumThread(classId)
         console.log(forums)
         forums.forEach(async (f) => {

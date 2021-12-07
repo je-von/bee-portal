@@ -7,7 +7,9 @@ import {
   getDoc,
   addDoc,
   orderBy,
+  deleteDoc,
   getFirestore,
+  updateDoc,
   Timestamp,
 } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
@@ -57,6 +59,41 @@ export class ForumReply {
       })
       this.replyId = docRef.id
       //   alert('berhasil')
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  static async get(replyId) {
+    const docRef = doc(Database.getDB(), 'forumreplies', replyId)
+    const docSnap = await getDoc(docRef)
+
+    let r = null
+    if (docSnap.exists()) {
+      const data = docSnap.data()
+      // console.log('asd')
+      r = new ForumReply(docSnap.id, data['forumId'].id, data['userId'].id, data['content'], data['replyDate'])
+    }
+    return r
+  }
+
+  async delete() {
+    try {
+      await deleteDoc(doc(Database.getDB(), 'forumreplies', this.replyId))
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  async update() {
+    try {
+      await updateDoc(doc(Database.getDB(), 'forumreplies', this.replyId), {
+        content: this.content,
+      })
       return true
     } catch (e) {
       console.log(e)

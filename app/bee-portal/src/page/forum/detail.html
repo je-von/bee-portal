@@ -24,7 +24,7 @@
       <div class="container">
         <div class="navbar-header d-flex">
           <a href="../home.html" class="navbar-brand" style="margin-right: 30px"
-            ><b>bee-<i>portal</i></b></a
+            ><i class="fab fa-forumbee mr-2" style="color: #ffdd00"></i><b>bee-<i>portal</i></b></a
           >
           <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul
@@ -92,8 +92,16 @@
           </h4>
           <div class="card mt-3" style="width: 90vw">
             <div class="card-body">
-              <b class="m-0" style="color: grey" id="forum-user">User</b>
-              <p class="m-0" style="color: grey" id="forum-date">Datetime</p>
+              <div class="d-flex justify-content-between">
+                <div>
+                  <b class="m-0" style="color: grey" id="forum-user">Name</b>
+                  <p class="m-0" style="color: grey" id="forum-date">Post date</p>
+                </div>
+                <div id="manage-forum-div">
+                  <a class="btn btn-outline-secondary mr-1" id="update-forum-btn"><i class="fas fa-pencil-alt"></i></a>
+                  <button class="btn btn-outline-danger" id="delete-forum-btn"><i class="far fa-trash-alt"></i></button>
+                </div>
+              </div>
               <hr class="m-0" />
               <h4 class="mt-3" id="forum-title">Post Title</h4>
               <p id="forum-content">Content</p>
@@ -121,8 +129,16 @@
             </div>
             <template id="reply-template">
               <div class="p-3 border-top">
-                <b class="m-0" style="color: grey" id="reply-user">User</b>
-                <p class="m-0" style="color: grey; font-size: 12px" id="reply-date">Datetime</p>
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <b class="m-0" style="color: grey" id="reply-user">User</b>
+                    <p class="m-0" style="color: grey; font-size: 12px" id="reply-date">Datetime</p>
+                  </div>
+                  <div id="manage-reply-div">
+                    <button class="btn btn-outline-secondary mr-1" id="update-reply-btn"><i class="fas fa-pencil-alt"></i></button>
+                    <button class="btn btn-outline-danger" id="delete-reply-btn"><i class="far fa-trash-alt"></i></button>
+                  </div>
+                </div>
                 <p class="mt-2 mb-0" style="color: black" id="reply-content">Content</p>
               </div>
             </template>
@@ -146,7 +162,7 @@
         const u = await UserController.getInstance().getUserById(localStorage.getItem('currentUser'))
         document.getElementById('welcome-txt').appendChild(document.createTextNode(u.name))
         const forumId = new URLSearchParams(window.location.search).get('id')
-        await ForumController.getInstance().showForumDetailPage(forumId)
+        await ForumController.getInstance().showForumDetailPage(forumId, u.userId)
 
         document.getElementById('reply-btn').addEventListener('click', async () => {
           console.log('klik')

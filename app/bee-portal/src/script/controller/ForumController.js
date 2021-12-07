@@ -3,6 +3,7 @@ import { CourseController } from './coursecontroller.js'
 import { UserController } from './UserController.js'
 import { ClassController } from './ClassController.js'
 import { ForumReply } from '../model/ForumReply.js'
+import { dialogs } from '../util/Utility.js'
 //singleton
 export const ForumController = (function () {
   var instance
@@ -20,8 +21,8 @@ export const ForumController = (function () {
         return ForumReply.getAll(forumId)
       },
 
-      showForumDetailPage: async function (id) {
-        const forum = await this.getForumThread(id)
+      showForumDetailPage: async function (forumId, userId) {
+        const forum = await this.getForumThread(forumId)
 
         let container = document.getElementById('container')
         let template = document.getElementById('forum-template')
@@ -43,9 +44,20 @@ export const ForumController = (function () {
         clone.querySelector('#forum-content').textContent = forum.content
 
         clone.querySelector('#forum-date').textContent = new Date(forum.postDate.seconds * 1000).toLocaleString()
+        // console.log(forum.postDate)
+
+        let div = clone.querySelector('#manage-forum-div')
+        if (userId == forum.userId) {
+          div.querySelector('#delete-forum-btn').addEventListener('click', async () => {
+            alert('click')
+          })
+          div.querySelector('#update-forum-btn').setAttribute('href', './update.html?id=' + forumId)
+        } else {
+          div.remove()
+        }
 
         if (!forum.isReplyHidden) {
-          const replies = await this.getAllForumReply(id)
+          const replies = await this.getAllForumReply(forumId)
           replies.forEach(async (r) => {
             let replyContainer = clone.querySelector('#reply-container')
             let replyTemplate = clone.querySelector('#reply-template')
@@ -57,6 +69,19 @@ export const ForumController = (function () {
             if (u.role == 'Lecturer') replyClone.querySelector('#reply-user').textContent += ' • Lecturer'
             replyClone.querySelector('#reply-date').textContent = new Date(r.replyDate.seconds * 1000).toLocaleString()
             replyClone.querySelector('#reply-content').textContent = r.content
+
+            div = replyClone.querySelector('#manage-reply-div')
+            if (userId == r.userId) {
+              div.querySelector('#delete-reply-btn').addEventListener('click', async () => {
+                // alert('delete click')
+                this.deleteReply(r.replyId)
+              })
+              div.querySelector('#update-reply-btn').addEventListener('click', async () => {
+                this.showUpdateReplyForm(r.replyId)
+              })
+            } else {
+              div.remove()
+            }
 
             replyContainer.appendChild(replyClone)
           })
@@ -74,7 +99,7 @@ export const ForumController = (function () {
 
       insertReply: async function (forumId, userId, content) {
         if (content.length < 5) {
-          alert('Reply must be at least 5 characters!')
+          dialogs.alert('Reply must be at least 5 characters!')
           return
         }
         const r = new ForumReply('', forumId, userId, content)
@@ -82,14 +107,96 @@ export const ForumController = (function () {
         const success = await r.insert()
 
         if (success) {
-          alert('Reply Success!')
-          location.reload()
+          dialogs.alert('Reply Success!', () => {
+            location.reload()
+          })
         } else {
-          alert('Reply error!')
+          dialogs.alert('Reply error!')
         }
 
         return success
       },
+      insertForumThread: async function (classId, userId, title, content, isReplyHidden) {
+        if (title.length < 5) {
+          dialogs.alert('Title must be at least 5 characters!')
+          return
+        }
+        if (content.length < 5) {
+          dialogs.alert('Content must be at least 5 characters!')
+          return
+        }
+        const f = new ForumThread('', classId, userId, title, content, false, isReplyHidden)
+
+        const success = await f.insert()
+
+        if (success) {
+          dialogs.alert('Post Success!', () => {
+            history.back()
+          })
+        } else {
+          dialogs.alert('Post error!')
+        }
+
+        return success
+      },
+      showInsertForumPage: async function (classId) {
+        const c = await ClassController.getInstance().getClassById(classId)
+        const course = await CourseController.getInstance().getCourseById(c.courseCode)
+        console.log(c.classCode)
+
+        let container = document.getElementById('container')
+        let template = document.getElementById('forum-template')
+
+        let clone = template.content.cloneNode(true)
+
+        clone.querySelector('#course-name').textContent = course.courseCode + ' - ' + course.name
+        clone.querySelector('#class-code').textContent = c.classCode
+
+        container.appendChild(clone)
+
+        document.querySelector('#loading-spinner').remove()
+      },
+      deleteReply(replyId) {
+        dialogs.confirm('Are you sure want to delete this reply?', async (conf) => {
+          if (conf) {
+            let r = await ForumReply.get(replyId)
+            if (r) {
+              let success = await r.delete()
+              if (success) {
+                dialogs.alert('Delete Success!', () => {
+                  location.reload()
+                })
+                return
+              }
+            }
+            dialogs.alert('Delete failed!')
+          }
+        })
+      },
+
+      async showUpdateReplyForm(replyId) {
+        let r = await ForumReply.get(replyId)
+
+        dialogs.prompt('Update thread reply', r.content, async (text) => {
+          if (text != null) {
+            if (text.length < 5) {
+              dialogs.alert('Content must be at least 5 characters')
+            } else {
+              r.content = text
+              let success = await r.update()
+              if (success) {
+                dialogs.alert('Update success!', () => {
+                  location.reload()
+                })
+              } else {
+                dialogs.alert('Update error!')
+              }
+            }
+          }
+        })
+      },
+
+      // updateReply(replyId, content) {},
     }
   }
 

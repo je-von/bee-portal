@@ -1,8 +1,19 @@
-import { collection, query, where, getDocs, doc, getDoc, orderBy, getFirestore } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  addDoc,
+  orderBy,
+  getFirestore,
+  Timestamp,
+} from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
 
 export class ForumThread {
-  constructor(forumId, classId, userId, title, content, postDate, isLocked, isReplyHidden) {
+  constructor(forumId = '', classId, userId, title, content, isLocked, isReplyHidden, postDate = Timestamp.now()) {
     this.forumId = forumId
     this.classId = classId
     this.userId = userId
@@ -16,12 +27,16 @@ export class ForumThread {
   static async getAll(classId) {
     console.log(classId)
     try {
-      const q = query(collection(Database.getDB(), 'forumthreads'), where('classId', '==', doc(Database.getDB(), 'classes', classId)))
+      const q = query(
+        collection(Database.getDB(), 'forumthreads'),
+        where('classId', '==', doc(Database.getDB(), 'classes', classId)),
+        orderBy('postDate', 'desc')
+      )
       const querySnapshot = await getDocs(q)
       const forums = []
       console.log(querySnapshot.empty)
       if (!querySnapshot.empty) {
-        querySnapshot.forEach(async (doc) => {
+        querySnapshot.forEach((doc) => {
           const data = doc.data()
           const f = new ForumThread(
             doc.id,
@@ -29,9 +44,9 @@ export class ForumThread {
             data['userId'].id,
             data['title'],
             data['content'],
-            data['postDate'],
             data['isLocked'],
-            data['isReplyHidden']
+            data['isReplyHidden'],
+            data['postDate']
           )
           forums.push(f)
         })
@@ -57,11 +72,30 @@ export class ForumThread {
         data['userId'].id,
         data['title'],
         data['content'],
-        data['postDate'],
         data['isLocked'],
-        data['isReplyHidden']
+        data['isReplyHidden'],
+        data['postDate']
       )
     }
     return f
+  }
+
+  async insert() {
+    try {
+      const docRef = await addDoc(collection(Database.getDB(), 'forumthreads'), {
+        userId: doc(Database.getDB(), 'users', this.userId),
+        classId: doc(Database.getDB(), 'classes', this.classId),
+        title: this.title,
+        content: this.content,
+        postDate: this.postDate,
+        isReplyHidden: this.isReplyHidden,
+        isLocked: this.isLocked,
+      })
+      this.forumId = docRef.id
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
   }
 }
