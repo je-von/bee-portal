@@ -1,5 +1,6 @@
 import { User } from '../model/user.js'
 import { dialogs } from '../util/Utility.js'
+
 //singleton
 export const UserController = (function () {
   var instance

@@ -23,7 +23,7 @@ const createWindow = () => {
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
-  mainWindow.setResizable(false)
+  // mainWindow.setResizable(false)
 }
 
 // This method will be called when Electron has finished

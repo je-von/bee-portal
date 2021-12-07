@@ -10,6 +10,7 @@ import {
   getFirestore,
   updateDoc,
 } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
+// import { getFunctions } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-functions.js'
 
 //Singleton
 export const Database = (function () {
@@ -26,7 +27,7 @@ export const Database = (function () {
       measurementId: 'G-RQH3850JL4',
     })
     db = getFirestore(firebaseApp)
-
+    // console.log(getFunctions())
     // const bcrypt = require('bcrypt-nodejs')
     // var salt = bcrypt.genSaltSync(10)
     // const hash = bcrypt.hashSync('lebron123', salt)
