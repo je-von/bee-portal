@@ -3,7 +3,7 @@ import { CourseController } from './coursecontroller.js'
 import { UserController } from './UserController.js'
 import { ClassController } from './ClassController.js'
 import { ForumReply } from '../model/ForumReply.js'
-import { dialogs } from '../util/Utility.js'
+import { dialogs, yesNoDialogs } from '../util/Utility.js'
 //singleton
 export const ForumController = (function () {
   var instance
@@ -49,9 +49,13 @@ export const ForumController = (function () {
         let div = clone.querySelector('#manage-forum-div')
         if (userId == forum.userId) {
           div.querySelector('#delete-forum-btn').addEventListener('click', async () => {
-            alert('click')
+            //reply" nya gak langsung ke delete
+            this.deleteThread(forum.forumId)
           })
-          div.querySelector('#update-forum-btn').setAttribute('href', './update.html?id=' + forumId)
+          div.querySelector('#update-forum-btn').addEventListener('click', async () => {
+            // alert('click u')
+            this.showUpdateForumForm(forum.forumId)
+          })
         } else {
           div.remove()
         }
@@ -158,6 +162,7 @@ export const ForumController = (function () {
       },
       deleteReply(replyId) {
         dialogs.confirm('Are you sure want to delete this reply?', async (conf) => {
+          console.log(conf)
           if (conf) {
             let r = await ForumReply.get(replyId)
             if (r) {
@@ -165,6 +170,25 @@ export const ForumController = (function () {
               if (success) {
                 dialogs.alert('Delete Success!', () => {
                   location.reload()
+                })
+                return
+              }
+            }
+            dialogs.alert('Delete failed!')
+          }
+        })
+      },
+
+      deleteThread(forumId) {
+        dialogs.confirm('Are you sure want to delete this thread?', async (conf) => {
+          console.log(conf)
+          if (conf) {
+            let f = await ForumThread.get(forumId)
+            if (f) {
+              let success = await f.delete()
+              if (success) {
+                dialogs.alert('Delete Success!', () => {
+                  history.back()
                 })
                 return
               }
@@ -195,7 +219,49 @@ export const ForumController = (function () {
           }
         })
       },
+      async showUpdateForumForm(forumId) {
+        let f = await ForumThread.get(forumId)
 
+        dialogs.prompt('Update thread title', f.title, (title) => {
+          if (title != null) {
+            if (title.length < 5) {
+              dialogs.alert('Title must be at least 5 characters')
+            } else {
+              f.title = title
+              dialogs.prompt('Update thread content', f.content, (content) => {
+                if (content != null) {
+                  f.content = content
+
+                  yesNoDialogs.confirm('Do you want to hide replies?', (hide) => {
+                    f.isReplyHidden = hide ? true : false
+                    dialogs.confirm('Confirm update?', async (conf) => {
+                      if (conf) {
+                        let success = await f.update()
+                        if (success) {
+                          dialogs.alert('Update success!', () => {
+                            location.reload()
+                          })
+                        } else {
+                          dialogs.alert('Update error!')
+                        }
+                      }
+                    })
+                  })
+                }
+              })
+              // r.content = text
+              // let success = await r.update()
+              // if (success) {
+              //   dialogs.alert('Update success!', () => {
+              //     location.reload()
+              //   })
+              // } else {
+              //   dialogs.alert('Update error!')
+              // }
+            }
+          }
+        })
+      },
       // updateReply(replyId, content) {},
     }
   }

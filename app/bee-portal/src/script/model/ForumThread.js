@@ -8,6 +8,8 @@ import {
   addDoc,
   orderBy,
   getFirestore,
+  deleteDoc,
+  updateDoc,
   Timestamp,
 } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
@@ -92,6 +94,30 @@ export class ForumThread {
         isLocked: this.isLocked,
       })
       this.forumId = docRef.id
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  async delete() {
+    try {
+      await deleteDoc(doc(Database.getDB(), 'forumthreads', this.forumId))
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  async update() {
+    try {
+      await updateDoc(doc(Database.getDB(), 'forumthreads', this.forumId), {
+        title: this.title,
+        content: this.content,
+        isReplyHidden: this.isReplyHidden,
+      })
       return true
     } catch (e) {
       console.log(e)

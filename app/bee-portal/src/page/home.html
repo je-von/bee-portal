@@ -95,7 +95,7 @@
       const u = await UserController.getInstance().getUserById(localStorage.getItem('currentUser'))
       document.getElementById('welcome-txt').appendChild(document.createTextNode(u.name))
 
-      console.log(u.name)
+      // console.log(u.name)
 
       let template = document.getElementById('dashboard-template')
       let container = document.getElementById('container')
@@ -137,7 +137,7 @@
         if (r.roles.includes(u.role)) {
           clone = template.content.cloneNode(true)
           let a = clone.querySelector('#nav-item')
-          console.log(a)
+          // console.log(a)
           a.textContent = r.name
           a.setAttribute('href', r.link)
           container.appendChild(a)

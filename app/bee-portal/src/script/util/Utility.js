@@ -8,3 +8,4 @@ export function getSchedule(day, shift) {
 
 const Dialogs = require('dialogs')
 export const dialogs = new Dialogs()
+export const yesNoDialogs = new Dialogs({ ok: 'YES', cancel: 'NO' })
