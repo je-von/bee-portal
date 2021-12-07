@@ -14,6 +14,23 @@ export const UserController = (function () {
         const u = await User.auth(email, password)
         if (u != null) {
           localStorage.setItem('currentUser', u.userId)
+          const notifier = require('node-notifier')
+          const path = require('path')
+          notifier.notify(
+            {
+              title: 'bee-portal',
+              message: 'Welcome to bee-portal, ' + u.name + ' !',
+              icon: path.join('', './src/logo/bee.png'),
+              sound: true,
+              wait: true,
+            },
+            function (err, response) {}
+          )
+
+          notifier.on('click', function (notifierObject, options) {})
+
+          notifier.on('timeout', function (notifierObject, options) {})
+
           console.log(localStorage.getItem('currentUser'))
           window.location.assign('./home.html')
         } else {
