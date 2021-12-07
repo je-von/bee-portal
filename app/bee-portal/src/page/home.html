@@ -91,6 +91,7 @@
 
   <script type="module">
     import { UserController } from '../script/controller/usercontroller.js'
+    import { routes } from '../script/util/Utility.js'
     window.onload = async () => {
       const u = await UserController.getInstance().getUserById(localStorage.getItem('currentUser'))
       document.getElementById('welcome-txt').appendChild(document.createTextNode(u.name))
@@ -111,24 +112,6 @@
       }
 
       container.appendChild(clone)
-
-      const routes = [
-        {
-          name: 'View All Classes',
-          link: './class/view.html',
-          roles: ['Student', 'Lecturer', 'Administrative Department'],
-        },
-        {
-          name: 'View All Courses',
-          link: '',
-          roles: ['Academic Department'],
-        },
-        {
-          name: 'View Score',
-          link: '',
-          roles: ['Student', 'Lecturer', 'Scoring Department'],
-        },
-      ]
 
       template = document.getElementById('nav-template')
       container = document.getElementById('menu-dropdown')

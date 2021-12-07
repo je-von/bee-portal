@@ -9,3 +9,21 @@ export function getSchedule(day, shift) {
 const Dialogs = require('dialogs')
 export const dialogs = new Dialogs()
 export const yesNoDialogs = new Dialogs({ ok: 'YES', cancel: 'NO' })
+
+export const routes = [
+  {
+    name: 'View All Classes',
+    link: './class/view.html',
+    roles: ['Student', 'Lecturer', 'Administrative Department'],
+  },
+  {
+    name: 'View All Courses',
+    link: '',
+    roles: ['Academic Department'],
+  },
+  {
+    name: 'View Score',
+    link: '',
+    roles: ['Student', 'Lecturer', 'Scoring Department'],
+  },
+]
