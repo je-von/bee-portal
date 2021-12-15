@@ -4,6 +4,7 @@ import { UserController } from './UserController.js'
 import { Syllabus } from '../model/Syllabus.js'
 import { getSchedule } from '../util/Utility.js'
 import { ForumController } from './ForumController.js'
+import { MajorController } from './majorcontroller.js'
 //singleton
 export const ClassController = (function () {
   var instance
@@ -117,6 +118,7 @@ export const ClassController = (function () {
         let i = 1
         c.studentIds.forEach(async (s) => {
           const student = await UserController.getInstance().getUserById(s)
+          let major = await MajorController.getInstance().getMajor(student.major)
 
           let studentContainer = document.getElementById('student-container')
           // console.log(studentContainer)
@@ -127,7 +129,8 @@ export const ClassController = (function () {
           rowClone.querySelector('#student-index').textContent = i
           rowClone.querySelector('#student-name').textContent = student.name
           rowClone.querySelector('#student-nim').textContent = student.NIM
-          rowClone.querySelector('#student-major').textContent = student.major
+
+          rowClone.querySelector('#student-major').textContent = major.name
 
           studentContainer.appendChild(rowClone)
           i++

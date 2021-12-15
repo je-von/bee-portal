@@ -39,19 +39,16 @@ export const Database = (function () {
     //   user: doc(Database.getDB(), 'users', '1Niqlyc6RCp2r83Sof7O'),
     // })
 
-    // const q = query(collection(Database.getDB(), 'users'), where('enrolledYear', '==', 2020))
+    // const q = query(collection(Database.getDB(), 'users'), where('role', '==', 'Student'))
 
     // const querySnapshot = await getDocs(q)
     // if (!querySnapshot.empty) {
     //   let i = 1
     //   querySnapshot.forEach((docSnap) => {
-    //     let major = ''
-    //     if (i % 2 == 0) major = 'Computer Science'
-    //     else major = 'Information System'
-    //     updateDoc(doc(Database.getDB(), 'users', docSnap.id), { major: major })
-    //     i++
+    //     updateDoc(doc(Database.getDB(), 'users', docSnap.id), { major: doc(Database.getDB(), 'majors', 'wHKrYgwgLO6DxXtX2CuP') })
     //   })
     // }
+    // console.log('done')
 
     // const querySnapshot = await getDocs(q)
     // if (!querySnapshot.empty) {

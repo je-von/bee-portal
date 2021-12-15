@@ -1,6 +1,6 @@
 import { User } from '../model/user.js'
 import { dialogs } from '../util/Utility.js'
-
+import { createNotification } from '../util/Utility.js'
 //singleton
 export const UserController = (function () {
   var instance
@@ -15,22 +15,8 @@ export const UserController = (function () {
         const u = await User.auth(email, password)
         if (u != null) {
           localStorage.setItem('currentUser', u.userId)
-          const notifier = require('node-notifier')
-          const path = require('path')
-          notifier.notify(
-            {
-              title: 'bee-portal',
-              message: 'Welcome to bee-portal, ' + u.name + ' !',
-              icon: path.join('', './src/logo/bee.png'),
-              sound: true,
-              wait: true,
-            },
-            function (err, response) {}
-          )
 
-          notifier.on('click', function (notifierObject, options) {})
-
-          notifier.on('timeout', function (notifierObject, options) {})
+          createNotification('Welcome to bee-portal, ' + u.name + ' !')
 
           console.log(localStorage.getItem('currentUser'))
           window.location.assign('./home.html')
@@ -41,6 +27,21 @@ export const UserController = (function () {
 
       getUserById: function (id) {
         return User.getById(id)
+      },
+
+      checkNotification: async function (id) {
+        let u = await this.getUserById(id)
+        console.log(u)
+        let notif = await u.checkNotification()
+
+        notif.forEach((n) => {
+          createNotification(n)
+        })
+      },
+
+      notify: async function (content, userId) {
+        let u = await this.getUserById(userId)
+        u.notify(content)
       },
 
       getAllUsersByRole: function (role) {},

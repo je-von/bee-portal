@@ -1,6 +1,17 @@
-import { collection, query, where, limit, getDocs, doc, getDoc, getFirestore } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
+import {
+  collection,
+  query,
+  where,
+  limit,
+  getDocs,
+  doc,
+  getDoc,
+  addDoc,
+  deleteDoc,
+  getFirestore,
+} from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
-
+import { UserFactory } from '../factory/UserFactory.js'
 export class User {
   constructor(userId, email, password, name, role) {
     this.userId = userId
@@ -28,7 +39,8 @@ export class User {
         const bcrypt = require('bcrypt-nodejs')
 
         if (bcrypt.compareSync(password, data.password)) {
-          u = this.snapshotToUser(doc)
+          let factory = new UserFactory()
+          u = factory.createUser(doc)
           console.log(u)
         }
       })
@@ -45,7 +57,8 @@ export class User {
     let u = null
     if (docSnap.exists()) {
       const data = docSnap.data()
-      u = this.snapshotToUser(docSnap)
+      let factory = new UserFactory()
+      u = factory.createUser(docSnap)
     }
     return u
   }
@@ -57,7 +70,8 @@ export class User {
     const users = []
     if (!querySnapshot.empty) {
       querySnapshot.forEach((doc) => {
-        let u = this.snapshotToUser(doc)
+        let factory = new UserFactory()
+        let u = factory.createUser(doc)
         users.push(u)
       })
     }
@@ -70,7 +84,8 @@ export class User {
     const users = []
     if (!querySnapshot.empty) {
       querySnapshot.forEach((doc) => {
-        let u = this.snapshotToUser(doc)
+        let factory = new UserFactory()
+        let u = factory.createUser(doc)
         users.push(u)
       })
     }
@@ -78,14 +93,39 @@ export class User {
     return users
   }
 
-  static snapshotToUser(doc) {
-    const data = doc.data()
-    if (data.role == 'Student') {
-      return new Student(doc.id, data['email'], data['password'], data['name'], data['role'], data['NIM'], data['enrolledYear'], data['major'])
-    } else if (data.role == 'Lecturer') {
-      return new Lecturer(doc.id, data['email'], data['password'], data['name'], data['role'], data['lecturerCode'])
-    } else {
-      return new User(doc.id, data['email'], data['password'], data['name'], data['role'])
+  async checkNotification() {
+    const q = query(
+      collection(Database.getDB(), 'notifications'),
+      where('userId', '==', doc(Database.getDB(), 'users', this.userId))
+      // where('seen', '==', false)
+    )
+
+    const querySnapshot = await getDocs(q)
+
+    let notif = []
+    if (!querySnapshot.empty) {
+      querySnapshot.forEach((docSnap) => {
+        console.log(docSnap.data()['content'])
+        notif.push(docSnap.data()['content'])
+
+        deleteDoc(doc(Database.getDB(), 'notifications', docSnap.id))
+      })
+    }
+
+    return notif
+  }
+
+  async notify(content) {
+    try {
+      const docRef = await addDoc(collection(Database.getDB(), 'notifications'), {
+        content: content,
+        seen: false,
+        userId: doc(Database.getDB(), 'users', this.userId),
+      })
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
     }
   }
 }

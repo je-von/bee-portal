@@ -60,7 +60,10 @@
     }
 
     import { UserController } from '../script/controller/usercontroller.js'
-    document.getElementById('submit-btn').addEventListener('click', () => {
+    // import { Major } from '../script/model/major.js'
+    document.getElementById('submit-btn').addEventListener('click', async () => {
+      // let major = await Major.get('wHKrYgwgLO6DxXtX2CuP')
+      // console.log(major)
       console.log('masuk')
       UserController.getInstance().auth(document.getElementById('email').value, document.getElementById('password').value)
     })

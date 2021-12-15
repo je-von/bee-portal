@@ -8,6 +8,17 @@ export const CourseController = (function () {
         const course = await Course.get(courseCode)
         return course
       },
+      getAllCourses: async function () {
+        try {
+          const courses = await Course.getAll()
+
+          console.log(courses)
+          return courses
+        } catch (e) {
+          console.log(e)
+          return []
+        }
+      },
     }
   }
 

@@ -18,7 +18,7 @@ export const routes = [
   },
   {
     name: 'View All Courses',
-    link: '',
+    link: './course/view.html',
     roles: ['Academic Department'],
   },
   {
@@ -27,3 +27,18 @@ export const routes = [
     roles: ['Student', 'Lecturer', 'Scoring Department'],
   },
 ]
+
+export function createNotification(content) {
+  const notifier = require('node-notifier')
+  const path = require('path')
+  notifier.notify(
+    {
+      title: 'bee-portal',
+      message: content,
+      icon: path.join('', './src/logo/bee.png'),
+      sound: true,
+      wait: true,
+    },
+    function (err, response) {}
+  )
+}

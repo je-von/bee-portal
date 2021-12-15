@@ -91,9 +91,14 @@
 
   <script type="module">
     import { UserController } from '../script/controller/usercontroller.js'
+    import { MajorController } from '../script/controller/majorcontroller.js'
+
     import { routes } from '../script/util/Utility.js'
     window.onload = async () => {
       const u = await UserController.getInstance().getUserById(localStorage.getItem('currentUser'))
+      // UserController.getInstance().notify('asdasd', u.userId)
+      UserController.getInstance().checkNotification(u.userId)
+
       document.getElementById('welcome-txt').appendChild(document.createTextNode(u.name))
 
       // console.log(u.name)
@@ -107,7 +112,8 @@
       clone.querySelector('#email-lbl').textContent = u.email
 
       if (u.role === 'Student') {
-        clone.querySelector('#role-lbl').textContent = u.role + ' - ' + u.major
+        let major = await MajorController.getInstance().getMajor(u.major)
+        clone.querySelector('#role-lbl').textContent = u.role + ' - ' + major.name
         clone.querySelector('#extras-lbl').textContent = u.NIM
       }
 

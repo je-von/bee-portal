@@ -19,4 +19,24 @@ export class Course {
     }
     return course
   }
+
+  static async getAll() {
+    try {
+      const q = query(collection(Database.getDB(), 'courses'))
+      const querySnapshot = await getDocs(q)
+      const courses = []
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(async (doc) => {
+          const data = doc.data()
+          const c = new Course(doc.id, data['name'], data['creditsPerSemester'])
+          courses.push(c)
+        })
+      }
+
+      return courses
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
 }

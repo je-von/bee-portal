@@ -9,7 +9,7 @@ import {
   DocumentReference,
 } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
-
+import { ClassFactory } from '../factory/ClassFactory.js'
 export class Class {
   constructor(classId, classCode, courseCode, studentIds, lecturerId, schedule, runningPeriod) {
     this.classId = classId
@@ -30,7 +30,8 @@ export class Class {
       if (!querySnapshot.empty) {
         querySnapshot.forEach(async (doc) => {
           console.log(doc)
-          const c = this.snapshotToClass(doc)
+          let factory = new ClassFactory()
+          let c = factory.createClass(doc)
           classes.push(c)
         })
       }
@@ -50,7 +51,8 @@ export class Class {
       if (!querySnapshot.empty) {
         querySnapshot.forEach(async (doc) => {
           console.log(doc)
-          const c = this.snapshotToClass(doc)
+          let factory = new ClassFactory()
+          let c = factory.createClass(doc)
           classes.push(c)
         })
       }
@@ -67,20 +69,9 @@ export class Class {
 
     let c = null
     if (docSnap.exists()) {
-      c = this.snapshotToClass(docSnap)
+      let factory = new ClassFactory()
+      c = factory.createClass(docSnap)
     }
-    return c
-  }
-
-  static snapshotToClass(doc) {
-    const data = doc.data()
-    const students = []
-    data['students'].forEach((s) => {
-      students.push(s.id)
-    })
-
-    const c = new Class(doc.id, data['classCode'], data['course'].id, students, data['lecturer'].id, data['schedule'], data['runningPeriod'])
-
     return c
   }
 }
