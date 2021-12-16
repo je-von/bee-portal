@@ -135,20 +135,21 @@ export const ForumController = (function () {
 
         if (success) {
           let c = await ClassController.getInstance().getClassById(classId)
-          console.log(c)
 
           let u = await UserController.getInstance().getUserById(userId)
 
-          // console.log(userId != c.lecturerId)
-          if (userId != c.lecturerId) {
-            UserController.getInstance().notify(u.name + ' has created a new Forum Thread on ' + c.classCode + ' - ' + c.courseCode, c.lecturerId)
-          }
+          c.observable.notifySubscribers(u.name + ' has created a new Forum Thread on ' + c.classCode + ' - ' + c.courseCode, userId)
 
-          c.studentIds.forEach((s) => {
-            if (userId != s)
-              UserController.getInstance().notify(u.name + ' has created a new Forum Thread on ' + c.classCode + ' - ' + c.courseCode, s)
-            //  has replied to your forum thread on  -
-          })
+          // console.log(userId != c.lecturerId)
+          // if (userId != c.lecturerId) {
+          //   UserController.getInstance().notify(u.name + ' has created a new Forum Thread on ' + c.classCode + ' - ' + c.courseCode, c.lecturerId)
+          // }
+
+          // c.studentIds.forEach((s) => {
+          //   if (userId != s)
+          //     UserController.getInstance().notify(u.name + ' has created a new Forum Thread on ' + c.classCode + ' - ' + c.courseCode, s)
+          //   //  has replied to your forum thread on  -
+          // })
 
           dialogs.alert('Post Success!', () => {
             history.back()

@@ -119,7 +119,7 @@ export class User {
     try {
       const docRef = await addDoc(collection(Database.getDB(), 'notifications'), {
         content: content,
-        seen: false,
+        // seen: false,
         userId: doc(Database.getDB(), 'users', this.userId),
       })
       return true

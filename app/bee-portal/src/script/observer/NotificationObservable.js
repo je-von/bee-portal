@@ -1,3 +1,5 @@
+import { UserController } from '../controller/UserController.js'
+
 export function Observable() {
   this.observers = []
 }
@@ -8,14 +10,18 @@ Observable.prototype = {
   },
 
   unsubscribe: function (user) {
-    this.observers = this.observers.filter(function (item) {
-      if (item !== user) {
-        return item
+    this.observers = this.observers.filter(function (o) {
+      if (o !== user) {
+        return o
       }
     })
   },
 
-  notifyAll: function (o, thisObj) {
-    this.observers.forEach(function (o) {})
+  notifySubscribers: function (notifContent, userId) {
+    this.observers.forEach(function (o) {
+      if (o != userId) {
+        UserController.getInstance().notify(notifContent, o)
+      }
+    })
   },
 }

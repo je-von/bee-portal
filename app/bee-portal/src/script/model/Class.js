@@ -10,6 +10,8 @@ import {
 } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
 import { ClassFactory } from '../factory/ClassFactory.js'
+import { Observable } from '../observer/NotificationObservable.js'
+
 export class Class {
   constructor(classId, classCode, courseCode, studentIds, lecturerId, schedule, runningPeriod) {
     this.classId = classId
@@ -19,6 +21,15 @@ export class Class {
     this.lecturerId = lecturerId
     this.schedule = schedule
     this.runningPeriod = runningPeriod
+
+    this.observable = new Observable()
+
+    this.observable.subscribe(lecturerId)
+    studentIds.forEach((s) => {
+      this.observable.subscribe(s)
+    })
+
+    // console.log(this.observable)
   }
 
   static async getAllByStudentId(studentId) {
