@@ -93,7 +93,7 @@
           clone.querySelector('#course-code').textContent = c.courseCode
           clone.querySelector('#credits').textContent = c.creditsPerSemester
 
-          clone.querySelector('#detail-btn').setAttribute('href', './detail.html?id=' + c.classId)
+          clone.querySelector('#detail-btn').setAttribute('href', './detail.html?id=' + c.courseCode)
 
           container.appendChild(clone)
 

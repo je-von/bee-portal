@@ -37,6 +37,7 @@
       <button class="btn btn-outline-secondary ml-3 back-button" onclick="history.back()">&#8249;</button>
       <h1>Class</h1>
       <hr />
+      <div class="text-center" id="button-container"></div>
       <div class="d-flex justify-content-center">
         <div class="spinner-border text-info" role="status" id="loading-spinner">
           <span class="sr-only">Loading...</span>
@@ -87,7 +88,15 @@
         let classes = []
         if (u.role === 'Student') classes = await ClassController.getInstance().getAllClassesByStudent(u.userId)
         else if (u.role === 'Lecturer') classes = await ClassController.getInstance().getAllClassesByLecturer(u.userId)
+        else if (u.role === 'Administrative Department') {
+          classes = await ClassController.getInstance().getAllClasses()
+          let a = document.createElement('a')
+          a.setAttribute('href', './insert.html')
+          a.setAttribute('class', 'btn btn-outline-success')
+          a.textContent = 'Create New Class'
 
+          document.querySelector('#button-container').appendChild(a)
+        }
         classes.forEach(async (c) => {
           let card = document.getElementById('card-template')
           let container = document.getElementById('container')

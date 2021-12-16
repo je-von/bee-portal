@@ -44,7 +44,9 @@ export const UserController = (function () {
         u.notify(content)
       },
 
-      getAllUsersByRole: function (role) {},
+      getAllUsersByRole: function (role) {
+        return User.getAllByRole(role)
+      },
     }
   }
 

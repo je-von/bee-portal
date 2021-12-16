@@ -5,6 +5,8 @@ import {
   getDocs,
   doc,
   getDoc,
+  addDoc,
+  updateDoc,
   getFirestore,
   DocumentReference,
 } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
@@ -74,6 +76,27 @@ export class Class {
       return null
     }
   }
+  static async getAll() {
+    try {
+      const q = query(collection(Database.getDB(), 'classes'))
+      console.log(q)
+      const querySnapshot = await getDocs(q)
+      const classes = []
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(async (doc) => {
+          console.log(doc)
+          let factory = new ClassFactory()
+          let c = factory.createClass(doc)
+          classes.push(c)
+        })
+      }
+
+      return classes
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
   static async get(classId) {
     const docRef = doc(Database.getDB(), 'classes', classId)
     const docSnap = await getDoc(docRef)
@@ -84,5 +107,37 @@ export class Class {
       c = factory.createClass(docSnap)
     }
     return c
+  }
+
+  async insert() {
+    try {
+      const docRef = addDoc(collection(Database.getDB(), 'classes'), {
+        classCode: this.classCode,
+        course: doc(Database.getDB(), 'courses', this.courseCode),
+
+        schedule: this.schedule,
+        runningPeriod: this.runningPeriod,
+      })
+      this.classId = docRef.id
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  async allocate() {
+    console.log(this.studentIds.map((s) => doc(Database.getDB(), 'users', s)))
+    try {
+      await updateDoc(doc(Database.getDB(), 'classes', this.classId), {
+        lecturer: doc(Database.getDB(), 'users', this.lecturerId),
+        students: this.studentIds.map((s) => doc(Database.getDB(), 'users', s)),
+      })
+
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
   }
 }

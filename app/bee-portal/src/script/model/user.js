@@ -8,6 +8,7 @@ import {
   getDoc,
   addDoc,
   deleteDoc,
+  orderBy,
   getFirestore,
 } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
@@ -50,7 +51,7 @@ export class User {
   }
 
   static async getById(id) {
-    // console.log(id)
+    console.log(id)
     const docRef = doc(Database.getDB(), 'users', id)
     const docSnap = await getDoc(docRef)
 
@@ -64,8 +65,9 @@ export class User {
   }
 
   static async getAllByRole(role) {
-    const q = query(collection(Database.getDB(), 'users'), where('role', '==', role))
-
+    let q = null
+    if (role == 'Student') q = query(collection(Database.getDB(), 'users'), orderBy('NIM', 'asc'))
+    else q = query(collection(Database.getDB(), 'users'), where('role', '==', role))
     const querySnapshot = await getDocs(q)
     const users = []
     if (!querySnapshot.empty) {

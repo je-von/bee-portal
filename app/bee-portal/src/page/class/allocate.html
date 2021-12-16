@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bee-portal by JV</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+      integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../../index.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-default d-flex">
+      <div class="container">
+        <div class="navbar-header d-flex">
+          <a href="../home.html" class="navbar-brand d-flex" style="margin-right: 30px">
+            <img src="../../logo/bee.png" class="mr-2" style="height: 30px" alt="" /><b>bee-<i>portal</i></b>
+          </a>
+        </div>
+
+        <div class="" id="">
+          <b id="welcome-txt" class="navbar-nav text-white ml-auto"> Hello, </b>
+        </div>
+      </div>
+    </nav>
+    <div class="pt-3 pb-3" id="container">
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border text-info" role="status" id="loading-spinner">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      <template id="class-template">
+        <button class="btn btn-outline-secondary ml-3 back-button" onclick="history.back()">&#8249;</button>
+        <div class="d-flex align-items-center flex-column">
+          <h2>Allocate Lecturer & Students</h2>
+          <h3 id="course-name" class="w-75 text-center">Course Code - Course Name</h3>
+          <h4 class="m-0">
+            <i class="fas fa-users mr-3"></i>
+            <label id="class-code">Class Code</label>
+          </h4>
+          <div class="card mt-3" style="width: 90vw" id="reply-container">
+            <div class="card-body">
+              <div class="d-flex">
+                <div class="flex-fill">
+                  <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="">Lecturer</span>
+                    </div>
+                    <select class="form-control" id="class-lecturer">
+                      <option>--Select Lecturer--</option>
+                    </select>
+                  </div>
+                  <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="">Students</span>
+                    </div>
+                    <select multiple="" class="form-control" id="class-students" size="10"></select>
+                  </div>
+
+                  <button type="submit" class="btn btn-outline-success" id="allocate-btn">Allocate</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+    <nav class="navbar navbar-dark bg-default text-white fixed-bottom">
+      <div class="container">
+        <div>© 2021 | JV</div>
+      </div>
+    </nav>
+  </body>
+
+  <script type="module">
+    import { UserController } from '../../script/controller/usercontroller.js'
+    import { ClassController } from '../../script/controller/classcontroller.js'
+
+    window.onload = async () => {
+      try {
+        const u = await UserController.getInstance().getUserById(localStorage.getItem('currentUser'))
+        document.getElementById('welcome-txt').appendChild(document.createTextNode(u.name))
+        const classId = new URLSearchParams(window.location.search).get('id')
+        await ClassController.getInstance().showAllocateClassPage(classId)
+
+        document.getElementById('allocate-btn').addEventListener('click', async () => {
+          console.log('klik')
+          let students = [...document.getElementById('class-students').selectedOptions].map((opt) => opt.value)
+          console.log(students)
+          await ClassController.getInstance().allocateLecturerAndStudents(classId, document.getElementById('class-lecturer').value, students)
+          //   const f = await ForumController.getInstance().insertForumThread(
+          //     classId,
+          //     u.userId,
+          //     document.getElementById('forum-title').value,
+          //     document.getElementById('forum-content').value,
+          //     document.getElementById('forum-hide-check').checked
+          //   )
+          //   console.log(f)
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  </script>
+  <script>
+    window.jQuery = window.$ = require('jquery')
+  </script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+    crossorigin="anonymous"
+  ></script>
+</html>
