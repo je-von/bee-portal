@@ -114,6 +114,7 @@ export const ClassController = (function () {
           clone.querySelector('#allocate-class-btn').remove()
 
           //forum tab
+
           clone.querySelector('#create-forum-btn').setAttribute('href', '../forum/insert.html?id=' + classId)
 
           const forums = await ForumController.getInstance().getAllForumThread(classId)
@@ -137,6 +138,12 @@ export const ClassController = (function () {
           })
 
           //group tab
+          if (role !== 'Lecturer') {
+            clone.querySelector('#create-group-btn').remove()
+          } else {
+            clone.querySelector('#create-group-btn').setAttribute('href', '../group/insert.html?id=' + classId)
+          }
+
           const groups = await StudentGroup.getAll(classId)
           let i = 1
           groups.forEach(async (g) => {
