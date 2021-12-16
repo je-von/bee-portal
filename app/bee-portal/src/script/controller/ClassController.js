@@ -6,7 +6,7 @@ import { getSchedule } from '../util/Utility.js'
 import { ForumController } from './ForumController.js'
 import { MajorController } from './majorcontroller.js'
 import { days, shifts, dialogs } from '../util/Utility.js'
-
+import { StudentGroup } from '../model/StudentGroup.js'
 //singleton
 export const ClassController = (function () {
   var instance
@@ -134,6 +134,33 @@ export const ClassController = (function () {
             forumClone.querySelector('#forum-link').setAttribute('href', '../forum/detail.html?id=' + f.forumId)
 
             forumContainer.appendChild(forumClone)
+          })
+
+          //group tab
+          const groups = await StudentGroup.getAll(classId)
+          let i = 1
+          groups.forEach(async (g) => {
+            let groupContainer = clone.getElementById('group-container')
+            let template = clone.getElementById('group-template')
+
+            let groupClone = template.content.cloneNode(true)
+
+            groupClone.querySelector('#group-num').textContent = 'Group ' + i
+
+            g.studentIds.forEach(async (gs) => {
+              let memberContainer = groupClone.getElementById('group-member-container')
+              let memberTemplate = groupClone.getElementById('member-template')
+
+              let m = memberTemplate.content.cloneNode(true)
+
+              const user = await UserController.getInstance().getUserById(gs)
+              m.querySelector('#member').textContent = user.NIM + ' - ' + user.name
+
+              memberContainer.appendChild(m)
+            })
+
+            groupContainer.appendChild(groupClone)
+            i++
           })
         }
 

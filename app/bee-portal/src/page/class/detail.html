@@ -156,7 +156,33 @@
             </div>
             <div class="tab-pane fade" id="attendance" role="tabpanel" aria-labelledby="attendance-tab">asd</div>
             <div class="tab-pane fade" id="assignment" role="tabpanel" aria-labelledby="assignment-tab">fgh</div>
-            <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">jkl</div>
+            <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
+              <a href="" class="btn btn-outline-success mt-3" id="create-group-btn">Create New Group</a>
+              <hr class="mb-0" />
+              <div class="row m-2 d-flex justify-content-center" id="group-container">
+                <!--template-->
+                <template id="group-template">
+                  <div class="card bg-light m-3 border border-primary" style="width: 30vw">
+                    <div class="card-body">
+                      <div>
+                        <div class="m-3" id="group-member-container">
+                          <div class="d-flex justify-content-between">
+                            <h4 class="card-title text-left" id="group-num">Group 1</h4>
+                            <!-- <div id="manage-group-div">
+                              <button class="btn btn-outline-secondary mr-1" id="update-group-btn"><i class="fas fa-pencil-alt"></i></button>
+                              <button class="btn btn-outline-danger" id="delete-group-btn"><i class="far fa-trash-alt"></i></button>
+                            </div> -->
+                          </div>
+                          <template id="member-template">
+                            <p class="text-leftcard-text m-0" id="member">2123 - Name</p>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
           </div>
         </div>
       </template>
