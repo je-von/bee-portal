@@ -172,6 +172,11 @@ export const ClassController = (function () {
           })
 
           //assignment tab
+          if (role == 'Lecturer') {
+            clone.querySelector('#create-assignment-btn').setAttribute('href', '../assignment/insert.html?id=' + classId)
+          } else {
+            clone.querySelector('#create-assignment-btn').remove()
+          }
           let asg = await AssignmentController.getInstance().getAllAssignment(classId)
           console.log(asg)
 
@@ -184,20 +189,29 @@ export const ClassController = (function () {
             assignmentClone.querySelector('#assignment-title').textContent = a.title
             assignmentClone.querySelector('#assignment-date').textContent = new Date(a.deadlineDate.seconds * 1000).toLocaleString()
 
-            assignmentClone.querySelector('#view-assignment-btn').addEventListener('click', async () => {
-              dialogs.alert(a.caseFile)
-            })
-
-            assignmentClone.querySelector('#submit-assignment-btn').addEventListener('click', async () => {
-              dialogs.prompt('Write your answer', async (text) => {
-                if (text != null) {
-                  if (text.length < 5) {
-                    dialogs.alert('Answer must be at least 5 characters')
-                  } else {
-                  }
-                }
+            if (role == 'Student') {
+              assignmentClone.querySelector('#view-assignment-btn').addEventListener('click', async () => {
+                dialogs.alert(a.caseFile)
               })
-            })
+
+              assignmentClone.querySelector('#submit-assignment-btn').addEventListener('click', async () => {
+                dialogs.prompt('Write your answer', async (text) => {
+                  if (text != null) {
+                    if (text.length < 5) {
+                      dialogs.alert('Answer must be at least 5 characters')
+                    } else {
+                    }
+                  }
+                })
+              })
+            } else {
+              assignmentClone.querySelector('#view-assignment-btn').addEventListener('click', async () => {
+                //view all answer
+                dialogs.alert(a.caseFile)
+              })
+              assignmentClone.querySelector('#submit-assignment-btn').remove()
+              assignmentClone.querySelector('#history-assignment-btn').remove()
+            }
 
             assignmentContainer.appendChild(assignmentClone)
           })
