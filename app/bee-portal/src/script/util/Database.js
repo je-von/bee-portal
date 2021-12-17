@@ -30,7 +30,7 @@ export const Database = (function () {
     // console.log(getFunctions())
     // const bcrypt = require('bcrypt-nodejs')
     // var salt = bcrypt.genSaltSync(10)
-    // const hash = bcrypt.hashSync('lebron123', salt)
+    // const hash = bcrypt.hashSync('kobe123', salt)
     // console.log(hash)
     // seedUsers()
 

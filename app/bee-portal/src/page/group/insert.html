@@ -88,22 +88,11 @@
         await StudentGroupController.getInstance().showInsertStudentGroupPage(classId)
         //     await ClassController.getInstance().showInsertClassPage()
 
-        //     document.getElementById('create-btn').addEventListener('click', async () => {
-        //       console.log('klik')
-        //       //   console.log([
-        //       //     document.getElementById('class-code').value,
-        //       //     document.getElementById('class-course').value,
-        //       //     { day: document.getElementById('class-day').value, shift: document.getElementById('class-shift').value },
-        //       //     { year: document.getElementById('class-year').value, semester: document.getElementById('class-semester').value },
-        //       //   ])
-        //       const c = await ClassController.getInstance().insertClass(
-        //         document.getElementById('class-code').value,
-        //         document.getElementById('class-course').value,
-        //         { day: parseInt(document.getElementById('class-day').value), shift: parseInt(document.getElementById('class-shift').value) },
-        //         { year: parseInt(document.getElementById('class-year').value), semester: document.getElementById('class-semester').value }
-        //       )
-        //       console.log(c)
-        //     })
+        document.getElementById('create-btn').addEventListener('click', async () => {
+          let students = [...document.getElementById('class-students').selectedOptions].map((opt) => opt.value)
+          console.log(students)
+          await StudentGroupController.getInstance().insertStudentGroup(classId, students)
+        })
       } catch (e) {
         console.log(e)
       }

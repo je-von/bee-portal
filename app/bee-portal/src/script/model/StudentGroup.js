@@ -1,4 +1,14 @@
-import { collection, query, where, limit, getDocs, doc, getDoc, getFirestore } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
+import {
+  collection,
+  query,
+  where,
+  limit,
+  getDocs,
+  doc,
+  addDoc,
+  getDoc,
+  getFirestore,
+} from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
 
 export class StudentGroup {
@@ -33,6 +43,20 @@ export class StudentGroup {
     } catch (e) {
       console.log(e)
       return []
+    }
+  }
+
+  async insert() {
+    try {
+      const docRef = addDoc(collection(Database.getDB(), 'studentgroups'), {
+        classId: doc(Database.getDB(), 'classes', this.classId),
+        studentIds: this.studentIds.map((s) => doc(Database.getDB(), 'users', s)),
+      })
+      this.groupId = docRef.id
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
     }
   }
 }

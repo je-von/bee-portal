@@ -7,6 +7,7 @@ import { ForumController } from './ForumController.js'
 import { MajorController } from './majorcontroller.js'
 import { days, shifts, dialogs } from '../util/Utility.js'
 import { StudentGroup } from '../model/StudentGroup.js'
+import { AssignmentController } from './AssignmentController.js'
 //singleton
 export const ClassController = (function () {
   var instance
@@ -169,6 +170,37 @@ export const ClassController = (function () {
             groupContainer.appendChild(groupClone)
             i++
           })
+
+          //assignment tab
+          let asg = await AssignmentController.getInstance().getAllAssignment(classId)
+          console.log(asg)
+
+          asg.forEach(async (a) => {
+            let assignmentContainer = clone.getElementById('assignment')
+            let template = clone.getElementById('assignment-template')
+
+            let assignmentClone = template.content.cloneNode(true)
+
+            assignmentClone.querySelector('#assignment-title').textContent = a.title
+            assignmentClone.querySelector('#assignment-date').textContent = new Date(a.deadlineDate.seconds * 1000).toLocaleString()
+
+            assignmentClone.querySelector('#view-assignment-btn').addEventListener('click', async () => {
+              dialogs.alert(a.caseFile)
+            })
+
+            assignmentClone.querySelector('#submit-assignment-btn').addEventListener('click', async () => {
+              dialogs.prompt('Write your answer', async (text) => {
+                if (text != null) {
+                  if (text.length < 5) {
+                    dialogs.alert('Answer must be at least 5 characters')
+                  } else {
+                  }
+                }
+              })
+            })
+
+            assignmentContainer.appendChild(assignmentClone)
+          })
         }
 
         //people tab
@@ -271,14 +303,23 @@ export const ClassController = (function () {
         document.querySelector('#loading-spinner').remove()
       },
       insertClass: async function (classCode, courseCode, schedule, runningPeriod) {
-        // if (title.length < 5) {
-        //   dialogs.alert('Title must be at least 5 characters!')
-        //   return
-        // }
-        // if (content.length < 5) {
-        //   dialogs.alert('Content must be at least 5 characters!')
-        //   return
-        // }
+        if (classCode.length !== 4) {
+          dialogs.alert('Class code must be 4 characters!')
+          return
+        }
+        if (!courseCode) {
+          dialogs.alert('Course code must be chosen!')
+          return
+        }
+        if (!schedule.day || !schedule.shift) {
+          dialogs.alert('Schedule day and shift be chosen!')
+          return
+        }
+        if (!runningPeriod.year || !runningPeriod.semester) {
+          dialogs.alert('Year and semester be chosen!')
+          return
+        }
+
         const c = new Class('', classCode, courseCode, [], [], schedule, runningPeriod)
 
         const success = await c.insert()

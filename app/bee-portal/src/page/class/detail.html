@@ -155,7 +155,24 @@
               </table>
             </div>
             <div class="tab-pane fade" id="attendance" role="tabpanel" aria-labelledby="attendance-tab">asd</div>
-            <div class="tab-pane fade" id="assignment" role="tabpanel" aria-labelledby="assignment-tab">fgh</div>
+            <div class="tab-pane fade" id="assignment" role="tabpanel" aria-labelledby="assignment-tab">
+              <a href="" class="btn btn-outline-success mt-3" id="create-assignment-btn">Create New Assignment</a>
+              <hr class="mb-0" />
+              <template id="assignment-template">
+                <div class="btn btn-outline-light w-100 text-left border-bottom pt-3 pb-3">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <p class="m-0" style="color: grey" id="assignment-date">Deadline date</p>
+                      <h5 class="mt-1" style="color: black" id="assignment-title">Assignment Title</h5>
+                    </div>
+                    <div id="">
+                      <button class="btn btn-outline-secondary mr-1" id="view-assignment-btn"><i class="far fa-eye"></i></button>
+                      <button class="btn btn-outline-primary" id="submit-assignment-btn"><i class="far fa-upload"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
             <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
               <div class="text-center">
                 <a href="" class="btn btn-outline-success mt-3" id="create-group-btn">Create New Group</a>

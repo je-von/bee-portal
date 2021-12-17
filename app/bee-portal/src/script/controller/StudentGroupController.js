@@ -2,7 +2,7 @@ import { StudentGroup } from '../model/StudentGroup.js'
 import { UserController } from './UserController.js'
 import { ClassController } from './ClassController.js'
 import { CourseController } from './CourseController.js'
-
+import { dialogs } from '../util/Utility.js'
 //singleton
 export const StudentGroupController = (function () {
   var instance
@@ -48,6 +48,20 @@ export const StudentGroupController = (function () {
         container.appendChild(clone)
 
         document.querySelector('#loading-spinner').remove()
+      },
+
+      insertStudentGroup: async function (classId, studentIds) {
+        const g = new StudentGroup('', classId, studentIds)
+
+        const success = await g.insert()
+
+        if (success) {
+          dialogs.alert('Create Group Success!', () => {
+            history.back()
+          })
+        } else {
+          dialogs.alert('Create error!')
+        }
       },
     }
   }
