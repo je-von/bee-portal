@@ -52,19 +52,34 @@ export const AssignmentController = (function () {
         document.querySelector('#loading-spinner').remove()
       },
 
-      insertAssignment: async function (classId, deadlineDate, caseFile, title, assignmentType) {
-        // if (answer.length < 5) {
-        //   dialogs.alert('Answer must be at least 5 characters')
-        //   return
-        // }
+      insertAssignment: async function (classId, deadline, caseFile, title, assignmentType) {
+        if (title.length < 5) {
+          dialogs.alert('Assignment title must be at least 5 char!')
+          return
+        }
+        if (caseFile.length < 5) {
+          dialogs.alert('Assignment case must be at least 5 char!')
+          return
+        }
+        if (!deadline.date || !deadline.time) {
+          dialogs.alert('Deadline date and time must be chosen!')
+          return
+        }
+        if (!assignmentType) {
+          dialogs.alert('Assignment type must be chosen!')
+          return
+        }
 
-        const asg = new Assignment('', classId, deadlineDate, title, caseFile, assignmentType)
+        let d = deadline.date.split('-')
+        let t = deadline.time.split(':')
 
-        const success = asg.insert()
+        const asg = new Assignment('', classId, new Date(d[0] - 1, d[1] - 1, d[2], t[0], t[1], 0, 0), title, caseFile, assignmentType)
+
+        const success = await asg.insert()
 
         if (success) {
           dialogs.alert('Create Assignment Success!', () => {
-            location.reload()
+            history.back()
           })
         } else {
           dialogs.alert('Create error!')

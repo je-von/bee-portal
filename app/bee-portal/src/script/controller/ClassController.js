@@ -196,7 +196,8 @@ export const ClassController = (function () {
 
             assignmentClone.querySelector('#assignment-title').textContent = a.title
 
-            assignmentClone.querySelector('#assignment-date').textContent = new Date(a.deadlineDate.seconds * 1000).toLocaleString()
+            let d = new Date(a.deadlineDate.seconds * 1000)
+            assignmentClone.querySelector('#assignment-date').textContent = 'Deadline: ' + d.toLocaleString()
             let type = document.createElement('i')
             type.textContent = ' • ' + a.assignmentType
             assignmentClone.querySelector('#assignment-date').appendChild(type)
@@ -206,13 +207,17 @@ export const ClassController = (function () {
                 dialogs.alert(a.caseFile)
               })
 
-              assignmentClone.querySelector('#submit-assignment-btn').addEventListener('click', async () => {
-                dialogs.prompt('Write your answer', async (text) => {
-                  if (text != null) {
-                    await AssignmentController.getInstance().insertIndividualAnswer(a.assignmentId, currentUser.userId, text)
-                  }
+              if (d < Date.now()) {
+                assignmentClone.querySelector('#submit-assignment-btn').remove()
+              } else {
+                assignmentClone.querySelector('#submit-assignment-btn').addEventListener('click', async () => {
+                  dialogs.prompt('Write your answer', async (text) => {
+                    if (text != null) {
+                      await AssignmentController.getInstance().insertIndividualAnswer(a.assignmentId, currentUser.userId, text)
+                    }
+                  })
                 })
-              })
+              }
               assignmentClone.querySelector('#history-assignment-btn').setAttribute('data-target', '#asg' + j)
               assignmentClone.querySelector('#assignment-ans-container').setAttribute('id', 'asg' + j)
               let answers = await AssignmentController.getInstance().getAllIndividualStudentAnswer(a.assignmentId, currentUser.userId)

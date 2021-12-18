@@ -26,6 +26,11 @@ export const routes = [
     link: '',
     roles: ['Student', 'Lecturer', 'Scoring Department'],
   },
+  {
+    name: 'Learning Report',
+    link: './report/export.html',
+    roles: ['Student'],
+  },
 ]
 
 export function createNotification(content) {

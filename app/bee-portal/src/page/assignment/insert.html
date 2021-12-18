@@ -58,13 +58,13 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="">Title</span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Write assignment title" id="class-code" />
+                    <input type="text" class="form-control" placeholder="Write assignment title" id="assignment-title" />
                   </div>
                   <div class="input-group mb-2">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="">Type</span>
                     </div>
-                    <select class="form-control" id="class-course">
+                    <select class="form-control" id="assignment-type">
                       <option value="">--Select Assignment Type--</option>
                       <option value="Individual">Individual</option>
                       <option value="Group">Group</option>
@@ -73,7 +73,7 @@
 
                   <textarea
                     class="form-control mb-2"
-                    id="forum-content"
+                    id="assignment-case"
                     style="resize: none; height: 140px"
                     placeholder="Write Assignment Case..."
                   ></textarea>
@@ -103,7 +103,7 @@
   <script type="module">
     import { UserController } from '../../script/controller/usercontroller.js'
     import { AssignmentController } from '../../script/controller/assignmentcontroller.js'
-    import { Timestamp } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
+    // import { Timestamp } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 
     window.onload = async () => {
       try {
@@ -113,28 +113,23 @@
         await AssignmentController.getInstance().showInsertAssignmentPage(classId)
 
         document.getElementById('create-btn').addEventListener('click', async () => {
-          console.log(typeof document.getElementById('deadline-date').value)
-          console.log(document.getElementById('deadline-date').value)
+          // console.log(typeof document.getElementById('deadline-date').value)
+          // console.log(document.getElementById('deadline-date').value)
 
-          console.log(document.getElementById('deadline-time').value)
-          let d = document.getElementById('deadline-date').value.split('-')
-          let t = document.getElementById('deadline-time').value.split(':')
+          // console.log(document.getElementById('deadline-time').value)
+          // let d = document.getElementById('deadline-date').value.split('-')
+          // let t = document.getElementById('deadline-time').value.split(':')
 
-          console.log(Timestamp.fromDate(new Date(d[0] - 1, d[1] - 1, d[2], t[0], t[1], 0, 0)))
-          //   console.log('klik')
-          //   //   console.log([
-          //   //     document.getElementById('class-code').value,
-          //   //     document.getElementById('class-course').value,
-          //   //     { day: document.getElementById('class-day').value, shift: document.getElementById('class-shift').value },
-          //   //     { year: document.getElementById('class-year').value, semester: document.getElementById('class-semester').value },
-          //   //   ])
-          //   const c = await ClassController.getInstance().insertClass(
-          //     document.getElementById('class-code').value,
-          //     document.getElementById('class-course').value,
-          //     { day: parseInt(document.getElementById('class-day').value), shift: parseInt(document.getElementById('class-shift').value) },
-          //     { year: parseInt(document.getElementById('class-year').value), semester: document.getElementById('class-semester').value }
-          //   )
-          //   console.log(c)
+          // console.log(Timestamp.fromDate(new Date(d[0] - 1, d[1] - 1, d[2], t[0], t[1], 0, 0)))
+
+          const a = await AssignmentController.getInstance().insertAssignment(
+            classId,
+            { date: document.getElementById('deadline-date').value, time: document.getElementById('deadline-time').value },
+            document.getElementById('assignment-case').value,
+            document.getElementById('assignment-title').value,
+            document.getElementById('assignment-type').value
+          )
+          // console.log(c)
         })
       } catch (e) {
         console.log(e)

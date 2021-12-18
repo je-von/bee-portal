@@ -8,6 +8,8 @@ import {
   addDoc,
   getDoc,
   getFirestore,
+  Timestamp,
+  orderBy,
 } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
 
@@ -23,7 +25,11 @@ export class Assignment {
 
   static async getAll(classId) {
     try {
-      const q = query(collection(Database.getDB(), 'assignments'), where('classId', '==', doc(Database.getDB(), 'classes', classId)))
+      const q = query(
+        collection(Database.getDB(), 'assignments'),
+        where('classId', '==', doc(Database.getDB(), 'classes', classId)),
+        orderBy('deadlineDate', 'asc')
+      )
       const querySnapshot = await getDocs(q)
       let asg = []
       // console.log(querySnapshot.empty)
@@ -47,7 +53,7 @@ export class Assignment {
     try {
       const docRef = await addDoc(collection(Database.getDB(), 'assignments'), {
         classId: doc(Database.getDB(), 'classes', this.classId),
-        deadlineDate: this.deadlineDate,
+        deadlineDate: Timestamp.fromDate(this.deadlineDate),
         title: this.title,
         case: this.caseFile,
         assignmentType: this.assignmentType,

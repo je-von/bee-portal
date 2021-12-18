@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>bee-portal by JV</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+      integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+    <style>
+      .invoice-box {
+        max-width: 800px;
+        margin: auto;
+        padding: 30px;
+        border: 1px solid #eee;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        font-size: 16px;
+        line-height: 24px;
+        font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+        color: #555;
+      }
+
+      .invoice-box table {
+        width: 100%;
+        line-height: inherit;
+        text-align: left;
+      }
+
+      .invoice-box table td {
+        padding: 5px;
+        vertical-align: top;
+      }
+
+      .invoice-box table tr td:nth-child(2) {
+        text-align: right;
+      }
+
+      .invoice-box table tr.top table td {
+        padding-bottom: 20px;
+      }
+
+      .invoice-box table tr.top table td.title {
+        font-size: 45px;
+        line-height: 45px;
+        color: #333;
+      }
+
+      .invoice-box table tr.information table td {
+        padding-bottom: 40px;
+      }
+
+      .invoice-box table tr.heading td {
+        background: #eee;
+        border-bottom: 1px solid #ddd;
+        font-weight: bold;
+      }
+
+      .invoice-box table tr.details td {
+        padding-bottom: 20px;
+      }
+
+      .invoice-box table tr.item td {
+        border-bottom: 1px solid #eee;
+      }
+
+      .invoice-box table tr.item.last td {
+        border-bottom: none;
+      }
+
+      .invoice-box table tr.total td:nth-child(2) {
+        border-top: 2px solid #eee;
+        font-weight: bold;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .invoice-box table tr.top table td {
+          width: 100%;
+          display: block;
+          text-align: center;
+        }
+
+        .invoice-box table tr.information table td {
+          width: 100%;
+          display: block;
+          text-align: center;
+        }
+      }
+
+      /** RTL **/
+      .invoice-box.rtl {
+        direction: rtl;
+        font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+      }
+
+      .invoice-box.rtl table {
+        text-align: right;
+      }
+
+      .invoice-box.rtl table tr td:nth-child(2) {
+        text-align: left;
+      }
+    </style>
+    <link rel="stylesheet" href="../../index.css" />
+  </head>
+
+  <body>
+    <button class="btn btn-outline-secondary ml-3 back-button" onclick="history.back()">&#8249;</button>
+    <div class="invoice-box" id="container">
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border text-info" role="status" id="loading-spinner">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      <template id="learning-report">
+        <h2>Learning Report</h2>
+        <table cellpadding="0" cellspacing="0">
+          <tbody id="course-container">
+            <tr class="top">
+              <td colspan="2">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td class="title">
+                        <img src="../../logo/bee.png" style="width: 100%; max-width: 150px" />
+                      </td>
+
+                      <td>
+                        <div>Report ID: <b id="report-id">123</b></div>
+                        <div id="report-date">February 1, 2015</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            <tr class="information">
+              <td colspan="2">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>SLC University</td>
+
+                      <td>
+                        <div id="student-name">Name</div>
+                        <div id="student-nim">NIM</div>
+                        <div id="student-major">Major</div>
+                        <div id="student-email">email</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            <tr class="heading">
+              <td>Course</td>
+
+              <td>Credits</td>
+            </tr>
+
+            <template id="course-template">
+              <tr class="item">
+                <td id="course-code">Code - Course Name</td>
+                <td id="course-credits">2</td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </template>
+    </div>
+    <div class="text-center mt-3">
+      <button class="btn btn-outline-primary" id="export-btn">Export to PDF</button>
+    </div>
+  </body>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script type="module">
+    import { UserController } from '../../script/controller/usercontroller.js'
+    // import { ClassController } from '../../script/controller/classcontroller.js'
+    window.onload = async () => {
+      try {
+        await UserController.getInstance().showLearningReportPage(localStorage.getItem('currentUser'))
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  </script>
+  <script>
+    window.jQuery = window.$ = require('jquery')
+    $(document).ready(function () {
+      $('body').tooltip({ selector: '[data-toggle=tooltip]' })
+    })
+    // let element = document.getElementById('container')
+    // html2pdf().from(element).save()
+  </script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+    crossorigin="anonymous"
+  ></script>
+</html>

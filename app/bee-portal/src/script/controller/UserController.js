@@ -1,6 +1,9 @@
 import { User } from '../model/user.js'
 import { dialogs } from '../util/Utility.js'
 import { createNotification } from '../util/Utility.js'
+import { CourseController } from './CourseController.js'
+import { ClassController } from './ClassController.js'
+import { MajorController } from './majorcontroller.js'
 //singleton
 export const UserController = (function () {
   var instance
@@ -46,6 +49,52 @@ export const UserController = (function () {
 
       getAllUsersByRole: function (role) {
         return User.getAllByRole(role)
+      },
+
+      showLearningReportPage: async function (userId) {
+        const u = await UserController.getInstance().getUserById(userId)
+
+        let template = document.getElementById('learning-report')
+        let container = document.getElementById('container')
+        const clone = template.content.cloneNode(true)
+
+        const faker = require('faker')
+        let reportId = faker.datatype.uuid()
+
+        clone.querySelector('#report-id').textContent = reportId
+        clone.querySelector('#report-date').textContent = new Date().toLocaleString()
+
+        clone.querySelector('#student-name').textContent = u.name
+        clone.querySelector('#student-nim').textContent = u.NIM
+
+        let major = await MajorController.getInstance().getMajor(u.major)
+        clone.querySelector('#student-major').textContent = major.name
+        clone.querySelector('#student-email').textContent = u.email
+
+        let classes = await ClassController.getInstance().getAllClassesByStudent(u.userId)
+        // console.log(courses)
+
+        classes.forEach(async (c) => {
+          let courseTemplate = clone.getElementById('course-template')
+          let courseContainer = clone.getElementById('course-container')
+          const courseClone = courseTemplate.content.cloneNode(true)
+
+          const course = await CourseController.getInstance().getCourseById(c.courseCode)
+
+          courseClone.querySelector('#course-code').textContent = c.courseCode + ' - ' + course.name
+          courseClone.querySelector('#course-credits').textContent = course.creditsPerSemester
+
+          courseContainer.appendChild(courseClone)
+        })
+
+        container.appendChild(clone)
+        document.querySelector('#loading-spinner').remove()
+
+        document.querySelector('#export-btn').addEventListener('click', () => {
+          let element = document.getElementById('container')
+          let w = html2pdf().from(element).save(reportId)
+          console.log(w)
+        })
       },
     }
   }
