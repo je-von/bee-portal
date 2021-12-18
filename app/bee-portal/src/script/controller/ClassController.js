@@ -8,6 +8,7 @@ import { MajorController } from './majorcontroller.js'
 import { days, shifts, dialogs } from '../util/Utility.js'
 import { StudentGroup } from '../model/StudentGroup.js'
 import { AssignmentController } from './AssignmentController.js'
+import { StudentGroupController } from './StudentGroupController.js'
 
 // import { IndividualAnswer } from '../model/AssignmentAnswer.js'
 
@@ -207,21 +208,41 @@ export const ClassController = (function () {
                 dialogs.alert(a.caseFile)
               })
 
+              // let g = StudentGroupController.getInstance().getStudentGroupByStudentId(classId, currentUser.userId)
+
               if (d < Date.now()) {
                 assignmentClone.querySelector('#submit-assignment-btn').remove()
               } else {
                 assignmentClone.querySelector('#submit-assignment-btn').addEventListener('click', async () => {
                   dialogs.prompt('Write your answer', async (text) => {
                     if (text != null) {
-                      await AssignmentController.getInstance().insertIndividualAnswer(a.assignmentId, currentUser.userId, text)
+                      if (a.assignmentType == 'Individual') {
+                        await AssignmentController.getInstance().insertIndividualAnswer(a.assignmentId, currentUser.userId, text)
+                      } else {
+                        let g = await StudentGroupController.getInstance().getStudentGroupByStudentId(classId, currentUser.userId)
+                        if (!g) {
+                          dialogs.alert("You don't have any group yet!")
+                        } else {
+                          await AssignmentController.getInstance().insertGroupAnswer(a.assignmentId, g.groupId, text)
+                        }
+                      }
                     }
                   })
                 })
               }
               assignmentClone.querySelector('#history-assignment-btn').setAttribute('data-target', '#asg' + j)
               assignmentClone.querySelector('#assignment-ans-container').setAttribute('id', 'asg' + j)
-              let answers = await AssignmentController.getInstance().getAllIndividualStudentAnswer(a.assignmentId, currentUser.userId)
-
+              let g = await StudentGroupController.getInstance().getStudentGroupByStudentId(classId, currentUser.userId)
+              console.log(g)
+              let answers = await (a.assignmentType == 'Individual'
+                ? AssignmentController.getInstance().getAllIndividualStudentAnswer(a.assignmentId, currentUser.userId)
+                : AssignmentController.getInstance().getAllGroupAnswer(a.assignmentId, await g.groupId))
+              console.log(a.title + ' - ' + answers)
+              // if (a.assignmentType == 'Individual') {
+              //   answers = await AssignmentController.getInstance().getAllIndividualStudentAnswer(a.assignmentId, currentUser.userId)
+              // } else {
+              //   answers = await AssignmentController.getInstance().getAllGroupAnswer(a.assignmentId, await g.groupId)
+              // }
               answers.forEach((ans) => {
                 let ansContainer = assignmentClone.getElementById('answer-container')
                 let ansTemplate = assignmentClone.getElementById('answer-template')

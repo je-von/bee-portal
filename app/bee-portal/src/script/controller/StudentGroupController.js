@@ -12,6 +12,10 @@ export const StudentGroupController = (function () {
         return StudentGroup.getAll(classId)
       },
 
+      getStudentGroupByStudentId: function (classId, studentId) {
+        return StudentGroup.getByStudentId(classId, studentId)
+      },
+
       async showInsertStudentGroupPage(classId) {
         const groups = await this.getAllStudentGroups(classId)
         console.log(groups)

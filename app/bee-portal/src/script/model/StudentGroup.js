@@ -46,6 +46,35 @@ export class StudentGroup {
     }
   }
 
+  static async getByStudentId(classId, studentId) {
+    try {
+      const q = query(
+        collection(Database.getDB(), 'studentgroups'),
+        where('studentIds', 'array-contains', doc(Database.getDB(), 'users', studentId)),
+        where('classId', '==', doc(Database.getDB(), 'classes', classId)),
+        limit(1)
+      )
+      // console.log(q)
+      const querySnapshot = await getDocs(q)
+      let group = null
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(async (doc) => {
+          const data = doc.data()
+          group = new StudentGroup(
+            doc.id,
+            data['classId'].id,
+            data['studentIds'].map((s) => s.id)
+          )
+        })
+      }
+      console.log(group)
+      return group
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
+
   async insert() {
     try {
       const docRef = await addDoc(collection(Database.getDB(), 'studentgroups'), {

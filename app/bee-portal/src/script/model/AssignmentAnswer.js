@@ -85,4 +85,43 @@ export class GroupAnswer extends AssignmentAnswer {
     super(answerId, assignmentId, answerFile, uploadDate)
     this.groupId = groupId
   }
+
+  async insert() {
+    try {
+      const docRef = await addDoc(collection(Database.getDB(), 'assignmentanswers'), {
+        assignmentId: doc(Database.getDB(), 'assignments', this.assignmentId),
+        answer: this.answerFile,
+        uploadDate: Timestamp.now(),
+        groupId: doc(Database.getDB(), 'studentgroups', this.groupId),
+      })
+      this.answerId = docRef.id
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  static async getAllGroupAnswer(assignmentId, groupId) {
+    const q = query(
+      collection(Database.getDB(), 'assignmentanswers'),
+      where('assignmentId', '==', doc(Database.getDB(), 'assignments', assignmentId)),
+      where('groupId', '==', doc(Database.getDB(), 'studentgroups', groupId))
+      // orderBy('uploadDate', 'desc')
+      // limit(1)
+    )
+
+    const querySnapshot = await getDocs(q)
+
+    let ans = []
+    if (!querySnapshot.empty) {
+      querySnapshot.forEach((doc) => {
+        const data = doc.data()
+        ans.push(new GroupAnswer(doc.id, data['assignmentId'].id, data['answer'], data['uploadDate'], data['groupId'].id))
+      })
+    }
+
+    console.log(ans)
+    return ans
+  }
 }

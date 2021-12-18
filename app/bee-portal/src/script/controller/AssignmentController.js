@@ -1,7 +1,7 @@
 import { Assignment } from '../model/Assignment.js'
 import { dialogs } from '../util/Utility.js'
 import { createNotification } from '../util/Utility.js'
-import { AssignmentAnswer, IndividualAnswer } from '../model/AssignmentAnswer.js'
+import { AssignmentAnswer, GroupAnswer, IndividualAnswer } from '../model/AssignmentAnswer.js'
 import { ClassController } from './ClassController.js'
 import { CourseController } from './coursecontroller.js'
 import { StudentGroupController } from './StudentGroupController.js'
@@ -15,6 +15,9 @@ export const AssignmentController = (function () {
       },
       getAllIndividualStudentAnswer: function (assignmentId, studentId) {
         return IndividualAnswer.getAllStudentAnswer(assignmentId, studentId)
+      },
+      getAllGroupAnswer: function (assignmentId, groupId) {
+        return GroupAnswer.getAllGroupAnswer(assignmentId, groupId)
       },
       insertIndividualAnswer: async function (assignmentId, studentId, answer) {
         if (answer.length < 5) {
@@ -35,6 +38,24 @@ export const AssignmentController = (function () {
         }
       },
 
+      insertGroupAnswer: async function (assignmentId, groupId, answer) {
+        if (answer.length < 5) {
+          dialogs.alert('Answer must be at least 5 characters')
+          return
+        }
+
+        const ans = new GroupAnswer('', assignmentId, answer, '', groupId)
+
+        const success = await ans.insert()
+
+        if (success) {
+          dialogs.alert('Submit Success!', () => {
+            location.reload()
+          })
+        } else {
+          dialogs.alert('Submit error!')
+        }
+      },
       showInsertAssignmentPage: async function (classId) {
         const c = await ClassController.getInstance().getClassById(classId)
         const course = await CourseController.getInstance().getCourseById(c.courseCode)
