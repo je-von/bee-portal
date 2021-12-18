@@ -158,21 +158,74 @@
             <div class="tab-pane fade" id="assignment" role="tabpanel" aria-labelledby="assignment-tab">
               <a href="" class="btn btn-outline-success mt-3" id="create-assignment-btn">Create New Assignment</a>
               <hr class="mb-0" />
-              <template id="assignment-template">
-                <div class="btn btn-outline-light w-100 text-left border-bottom pt-3 pb-3">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <p class="m-0" style="color: grey" id="assignment-date">Deadline date</p>
-                      <h5 class="mt-1" style="color: black" id="assignment-title">Assignment Title</h5>
+              <div id="accordion">
+                <template id="assignment-template">
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="d-flex justify-content-between">
+                        <div>
+                          <p class="m-0" style="color: grey" id="assignment-date">Deadline date</p>
+                          <h5 class="mt-1" style="color: black" id="assignment-title">Assignment Title</h5>
+                        </div>
+                        <div id="">
+                          <button
+                            class="btn btn-outline-secondary"
+                            id="view-assignment-btn"
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title=""
+                            data-original-title="View Assignment Case"
+                          >
+                            <i class="far fa-eye"></i>
+                          </button>
+                          <button
+                            class="btn btn-success"
+                            id="submit-assignment-btn"
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title=""
+                            data-original-title="Submit Assignment Answer"
+                          >
+                            <i class="far fa-plus"></i>
+                          </button>
+                          <div data-toggle="tooltip" data-placement="bottom" title="" data-original-title="View Answer History" class="d-inline">
+                            <button
+                              class="btn btn-outline-secondary collapsed"
+                              id="history-assignment-btn"
+                              data-toggle="collapse"
+                              data-target="#asg123"
+                              aria-expanded="false"
+                            >
+                              <i class="far fa-history"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div id="">
-                      <button class="btn btn-outline-secondary mr-1" id="view-assignment-btn"><i class="far fa-eye"></i></button>
-                      <button class="btn btn-success" id="submit-assignment-btn"><i class="far fa-plus"></i></button>
-                      <button class="btn btn-outline-secondary" id="history-assignment-btn"><i class="far fa-history"></i></button>
+
+                    <div id="assignment-ans-container" class="collapse" data-parent="#accordion">
+                      <div class="card-body p-0">
+                        <table class="table table-sm">
+                          <thead>
+                            <tr>
+                              <th scope="col" class="w-75">Answer</th>
+                              <th scope="col">Upload Date</th>
+                            </tr>
+                          </thead>
+                          <tbody id="answer-container">
+                            <template id="answer-template">
+                              <tr>
+                                <td id="answer-content">asdf</td>
+                                <td id="upload-date">20/20/20</td>
+                              </tr>
+                            </template>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </template>
+                </template>
+              </div>
             </div>
             <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
               <div class="text-center">
@@ -223,8 +276,8 @@
         const u = await UserController.getInstance().getUserById(localStorage.getItem('currentUser'))
         document.getElementById('welcome-txt').appendChild(document.createTextNode(u.name))
         const classId = new URLSearchParams(window.location.search).get('id')
-        console.log(classId)
-        await ClassController.getInstance().showClassDetailPage(classId, u.role)
+        // console.log(classId)
+        await ClassController.getInstance().showClassDetailPage(classId, u.userId)
       } catch (e) {
         console.log(e)
       }
@@ -232,6 +285,9 @@
   </script>
   <script>
     window.jQuery = window.$ = require('jquery')
+    $(document).ready(function () {
+      $('body').tooltip({ selector: '[data-toggle=tooltip]' })
+    })
   </script>
   <script
     src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"

@@ -23,7 +23,7 @@ export class StudentGroup {
       const q = query(collection(Database.getDB(), 'studentgroups'), where('classId', '==', doc(Database.getDB(), 'classes', classId)))
       const querySnapshot = await getDocs(q)
       let groups = []
-      console.log(querySnapshot.empty)
+      // console.log(querySnapshot.empty)
       if (!querySnapshot.empty) {
         querySnapshot.forEach((doc) => {
           const data = doc.data()
@@ -36,7 +36,7 @@ export class StudentGroup {
           )
         })
 
-        console.log(groups)
+        // console.log(groups)
       }
 
       return groups

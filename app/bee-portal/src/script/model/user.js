@@ -51,7 +51,7 @@ export class User {
   }
 
   static async getById(id) {
-    console.log(id)
+    // console.log(id)
     const docRef = doc(Database.getDB(), 'users', id)
     const docSnap = await getDoc(docRef)
 

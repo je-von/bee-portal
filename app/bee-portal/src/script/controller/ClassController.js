@@ -8,6 +8,9 @@ import { MajorController } from './majorcontroller.js'
 import { days, shifts, dialogs } from '../util/Utility.js'
 import { StudentGroup } from '../model/StudentGroup.js'
 import { AssignmentController } from './AssignmentController.js'
+
+// import { IndividualAnswer } from '../model/AssignmentAnswer.js'
+
 //singleton
 export const ClassController = (function () {
   var instance
@@ -38,7 +41,7 @@ export const ClassController = (function () {
         try {
           const classes = await Class.getAllByLecturerId(lecturerId)
           // console.log('selesai')
-          console.log(classes)
+          // console.log(classes)
           return classes
         } catch (e) {
           console.log(e)
@@ -50,7 +53,9 @@ export const ClassController = (function () {
         return c
       },
 
-      showClassDetailPage: async function (classId, role) {
+      showClassDetailPage: async function (classId, userId) {
+        const currentUser = await UserController.getInstance().getUserById(userId)
+
         const c = await this.getClassById(classId)
         let template = document.getElementById('template')
         let container = document.getElementById('container')
@@ -69,7 +74,7 @@ export const ClassController = (function () {
 
         //syllabus tab
         const syllabus = await Syllabus.getAll(c.courseCode)
-        console.log(syllabus)
+        // console.log(syllabus)
         if (syllabus) {
           clone.querySelector('#course-desc').textContent = syllabus.courseDescription
 
@@ -103,7 +108,7 @@ export const ClassController = (function () {
             tContainer.appendChild(listClone)
           })
         }
-        if (role === 'Administrative Department') {
+        if (currentUser.role === 'Administrative Department') {
           clone.querySelector('#forum-tab-container').remove()
           clone.querySelector('#attendance-tab-container').remove()
           clone.querySelector('#assignment-tab-container').remove()
@@ -119,7 +124,7 @@ export const ClassController = (function () {
           clone.querySelector('#create-forum-btn').setAttribute('href', '../forum/insert.html?id=' + classId)
 
           const forums = await ForumController.getInstance().getAllForumThread(classId)
-          console.log(forums)
+          // console.log(forums)
           forums.forEach(async (f) => {
             let forumContainer = clone.getElementById('forum')
             let template = clone.getElementById('forum-template')
@@ -139,7 +144,7 @@ export const ClassController = (function () {
           })
 
           //group tab
-          if (role !== 'Lecturer') {
+          if (currentUser.role !== 'Lecturer') {
             clone.querySelector('#create-group-btn').remove()
           } else {
             clone.querySelector('#create-group-btn').setAttribute('href', '../group/insert.html?id=' + classId)
@@ -172,24 +177,31 @@ export const ClassController = (function () {
           })
 
           //assignment tab
-          if (role == 'Lecturer') {
+          if (currentUser.role == 'Lecturer') {
             clone.querySelector('#create-assignment-btn').setAttribute('href', '../assignment/insert.html?id=' + classId)
           } else {
             clone.querySelector('#create-assignment-btn').remove()
           }
           let asg = await AssignmentController.getInstance().getAllAssignment(classId)
-          console.log(asg)
+          // console.log(asg)
 
+          // console.log(a)
+          let j = 0
           asg.forEach(async (a) => {
+            j++
             let assignmentContainer = clone.getElementById('assignment')
             let template = clone.getElementById('assignment-template')
 
             let assignmentClone = template.content.cloneNode(true)
 
             assignmentClone.querySelector('#assignment-title').textContent = a.title
-            assignmentClone.querySelector('#assignment-date').textContent = new Date(a.deadlineDate.seconds * 1000).toLocaleString()
 
-            if (role == 'Student') {
+            assignmentClone.querySelector('#assignment-date').textContent = new Date(a.deadlineDate.seconds * 1000).toLocaleString()
+            let type = document.createElement('i')
+            type.textContent = ' • ' + a.assignmentType
+            assignmentClone.querySelector('#assignment-date').appendChild(type)
+
+            if (currentUser.role == 'Student') {
               assignmentClone.querySelector('#view-assignment-btn').addEventListener('click', async () => {
                 dialogs.alert(a.caseFile)
               })
@@ -197,13 +209,25 @@ export const ClassController = (function () {
               assignmentClone.querySelector('#submit-assignment-btn').addEventListener('click', async () => {
                 dialogs.prompt('Write your answer', async (text) => {
                   if (text != null) {
-                    if (text.length < 5) {
-                      dialogs.alert('Answer must be at least 5 characters')
-                    } else {
-                    }
+                    await AssignmentController.getInstance().insertIndividualAnswer(a.assignmentId, currentUser.userId, text)
                   }
                 })
               })
+              assignmentClone.querySelector('#history-assignment-btn').setAttribute('data-target', '#asg' + j)
+              assignmentClone.querySelector('#assignment-ans-container').setAttribute('id', 'asg' + j)
+              let answers = await AssignmentController.getInstance().getAllIndividualStudentAnswer(a.assignmentId, currentUser.userId)
+
+              answers.forEach((ans) => {
+                let ansContainer = assignmentClone.getElementById('answer-container')
+                let ansTemplate = assignmentClone.getElementById('answer-template')
+
+                let ansClone = ansTemplate.content.cloneNode(true)
+                ansClone.querySelector('#answer-content').textContent = ans.answerFile
+                ansClone.querySelector('#upload-date').textContent = new Date(ans.uploadDate.seconds * 1000).toLocaleString()
+
+                ansContainer.appendChild(ansClone)
+              })
+              assignmentClone.querySelector('#history-assignment-btn').addEventListener('click', async () => {})
             } else {
               assignmentClone.querySelector('#view-assignment-btn').addEventListener('click', async () => {
                 //view all answer

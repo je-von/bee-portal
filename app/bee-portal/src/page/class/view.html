@@ -112,9 +112,8 @@
           clone.querySelector('#detail-btn').setAttribute('href', './detail.html?id=' + c.classId)
 
           container.appendChild(clone)
-
-          document.querySelector('#loading-spinner').remove()
         })
+        document.querySelector('#loading-spinner').remove()
       } catch (e) {
         console.log(e)
       }

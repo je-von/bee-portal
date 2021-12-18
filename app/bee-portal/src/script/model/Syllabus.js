@@ -16,7 +16,7 @@ export class Syllabus {
       const q = query(collection(Database.getDB(), 'syllabuses'), where('course', '==', doc(Database.getDB(), 'courses', courseCode)), limit(1))
       const querySnapshot = await getDocs(q)
       let syllabus = null
-      console.log(querySnapshot.empty)
+      // console.log(querySnapshot.empty)
       if (!querySnapshot.empty) {
         querySnapshot.forEach((doc) => {
           const data = doc.data()
@@ -30,7 +30,7 @@ export class Syllabus {
           )
         })
 
-        console.log(syllabus)
+        // console.log(syllabus)
       }
 
       return syllabus

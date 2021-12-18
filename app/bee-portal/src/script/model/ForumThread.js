@@ -27,7 +27,7 @@ export class ForumThread {
   }
 
   static async getAll(classId) {
-    console.log(classId)
+    // console.log(classId)
     try {
       const q = query(
         collection(Database.getDB(), 'forumthreads'),
@@ -36,7 +36,7 @@ export class ForumThread {
       )
       const querySnapshot = await getDocs(q)
       const forums = []
-      console.log(querySnapshot.empty)
+      // console.log(querySnapshot.empty)
       if (!querySnapshot.empty) {
         querySnapshot.forEach((doc) => {
           const data = doc.data()

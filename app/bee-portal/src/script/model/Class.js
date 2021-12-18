@@ -42,7 +42,7 @@ export class Class {
       const classes = []
       if (!querySnapshot.empty) {
         querySnapshot.forEach(async (doc) => {
-          console.log(doc)
+          // console.log(doc)
           let factory = new ClassFactory()
           let c = factory.createClass(doc)
           classes.push(c)
@@ -58,12 +58,12 @@ export class Class {
   static async getAllByLecturerId(lecturerId) {
     try {
       const q = query(collection(Database.getDB(), 'classes'), where('lecturer', '==', doc(Database.getDB(), 'users', lecturerId)))
-      console.log(q)
+      // console.log(q)
       const querySnapshot = await getDocs(q)
       const classes = []
       if (!querySnapshot.empty) {
         querySnapshot.forEach(async (doc) => {
-          console.log(doc)
+          // console.log(doc)
           let factory = new ClassFactory()
           let c = factory.createClass(doc)
           classes.push(c)
@@ -111,7 +111,7 @@ export class Class {
 
   async insert() {
     try {
-      const docRef = addDoc(collection(Database.getDB(), 'classes'), {
+      const docRef = await addDoc(collection(Database.getDB(), 'classes'), {
         classCode: this.classCode,
         course: doc(Database.getDB(), 'courses', this.courseCode),
 
