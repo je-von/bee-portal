@@ -48,7 +48,7 @@ export class StudentGroup {
 
   async insert() {
     try {
-      const docRef = addDoc(collection(Database.getDB(), 'studentgroups'), {
+      const docRef = await addDoc(collection(Database.getDB(), 'studentgroups'), {
         classId: doc(Database.getDB(), 'classes', this.classId),
         studentIds: this.studentIds.map((s) => doc(Database.getDB(), 'users', s)),
       })

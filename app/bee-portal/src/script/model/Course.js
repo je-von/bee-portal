@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs, doc, getDoc, getFirestore } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
+import { collection, query, where, getDocs, doc, getDoc, getFirestore, setDoc } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
 
 export class Course {
@@ -37,6 +37,19 @@ export class Course {
     } catch (e) {
       console.log(e)
       return null
+    }
+  }
+
+  async insert() {
+    try {
+      await setDoc(doc(Database.getDB(), 'courses', this.courseCode), {
+        name: this.name,
+        creditsPerSemester: this.creditsPerSemester,
+      })
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
     }
   }
 }

@@ -4,6 +4,7 @@ import { createNotification } from '../util/Utility.js'
 import { AssignmentAnswer, IndividualAnswer } from '../model/AssignmentAnswer.js'
 import { ClassController } from './ClassController.js'
 import { CourseController } from './coursecontroller.js'
+import { StudentGroupController } from './StudentGroupController.js'
 //singleton
 export const AssignmentController = (function () {
   var instance
@@ -70,10 +71,18 @@ export const AssignmentController = (function () {
           return
         }
 
+        if (assignmentType == 'Group') {
+          let groups = await StudentGroupController.getInstance().getAllStudentGroups(classId)
+          if (!groups || groups.length < 1) {
+            dialogs.alert('You must create student groups first before creating group assignment!')
+            return
+          }
+        }
+
         let d = deadline.date.split('-')
         let t = deadline.time.split(':')
 
-        const asg = new Assignment('', classId, new Date(d[0] - 1, d[1] - 1, d[2], t[0], t[1], 0, 0), title, caseFile, assignmentType)
+        const asg = new Assignment('', classId, new Date(d[0], d[1] - 1, d[2], t[0], t[1], 0, 0), title, caseFile, assignmentType)
 
         const success = await asg.insert()
 

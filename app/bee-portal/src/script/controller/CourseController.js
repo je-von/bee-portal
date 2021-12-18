@@ -1,5 +1,6 @@
 import { Course } from '../model/course.js'
 import { Syllabus } from '../model/Syllabus.js'
+import { dialogs } from '../util/Utility.js'
 //singleton
 export const CourseController = (function () {
   var instance
@@ -68,6 +69,38 @@ export const CourseController = (function () {
         container.appendChild(clone)
 
         document.querySelector('#loading-spinner').remove()
+      },
+
+      showInsertCourseForm: async function () {
+        dialogs.prompt('Input course code', (code) => {
+          if (code != null) {
+            if (code.length != 8) {
+              dialogs.alert('Course code must be 8 characters')
+            } else {
+              dialogs.prompt('Input course name', (name) => {
+                if (name != null) {
+                  dialogs.prompt('Input course credits per semester', async (c) => {
+                    let credits = parseInt(c)
+                    if (!credits) {
+                      dialogs.alert('Credits must be integer')
+                    } else {
+                      let c = new Course(code, name, credits)
+                      let success = await c.insert()
+
+                      if (success) {
+                        dialogs.alert('Create course success!', () => {
+                          location.reload()
+                        })
+                      } else {
+                        dialogs.alert('Create course error!')
+                      }
+                    }
+                  })
+                }
+              })
+            }
+          }
+        })
       },
     }
   }
