@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bee-portal by JV</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+      integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../../index.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-default d-flex">
+      <div class="container">
+        <div class="navbar-header d-flex">
+          <a href="../home.html" class="navbar-brand d-flex" style="margin-right: 30px"
+            ><img src="../../logo/bee.png" class="mr-2" style="height: 30px" alt="" /><b>bee-<i>portal</i></b></a
+          >
+        </div>
+
+        <div class="" id="">
+          <b id="welcome-txt" class="navbar-nav text-white ml-auto"> Hello, </b>
+        </div>
+      </div>
+    </nav>
+    <div class="pt-3 pb-3" id="container">
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border text-info" role="status" id="loading-spinner">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      <template id="template">
+        <button class="btn btn-outline-secondary ml-3 back-button" onclick="history.back()">&#8249;</button>
+        <div class="d-flex align-items-center flex-column">
+          <h2 id="major-name">Major</h2>
+          <p class="m-0"><i class="fas fa-newspaper mr-3"></i><label id="total-credits">2</label></p>
+        </div>
+
+        <div class="ml-5 mr-5">
+          <div id="accordion">
+            <template id="semester-template">
+              <div class="card">
+                <div class="card-header" id="headingTwo">
+                  <h5 class="mb-0">
+                    <button id="semester-num" class="btn btn-link collapsed" data-toggle="collapse" data-target="#semester1" aria-expanded="false">
+                      Semester 1
+                    </button>
+                  </h5>
+                </div>
+                <div id="semester-content" class="collapse" data-parent="#accordion">
+                  <div class="card-body p-0">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th scope="col" class="w-75">Course</th>
+                          <th scope="col">Credits</th>
+                        </tr>
+                      </thead>
+                      <tbody id="course-container">
+                        <template id="course-template">
+                          <tr>
+                            <td id="course-name">asdf</td>
+                            <td id="course-credits">2</td>
+                          </tr>
+                        </template>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+    <nav class="navbar navbar-dark text-white bg-default fixed-bottom">
+      <div class="container">
+        <div>© 2021 | JV</div>
+      </div>
+    </nav>
+  </body>
+
+  <script type="module">
+    import { UserController } from '../../script/controller/usercontroller.js'
+    import { MajorController } from '../../script/controller/majorcontroller.js'
+    window.onload = async () => {
+      try {
+        const u = await UserController.getInstance().getUserById(localStorage.getItem('currentUser'))
+        document.getElementById('welcome-txt').appendChild(document.createTextNode(u.name))
+        const majorId = new URLSearchParams(window.location.search).get('id')
+        console.log(majorId)
+
+        await MajorController.getInstance().showMajorDetailPage(majorId)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  </script>
+  <script>
+    window.jQuery = window.$ = require('jquery')
+  </script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+    crossorigin="anonymous"
+  ></script>
+</html>

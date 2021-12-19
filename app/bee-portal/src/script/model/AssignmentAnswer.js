@@ -106,8 +106,8 @@ export class GroupAnswer extends AssignmentAnswer {
     const q = query(
       collection(Database.getDB(), 'assignmentanswers'),
       where('assignmentId', '==', doc(Database.getDB(), 'assignments', assignmentId)),
-      where('groupId', '==', doc(Database.getDB(), 'studentgroups', groupId))
-      // orderBy('uploadDate', 'desc')
+      where('groupId', '==', doc(Database.getDB(), 'studentgroups', groupId)),
+      orderBy('uploadDate', 'desc')
       // limit(1)
     )
 

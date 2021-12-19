@@ -236,7 +236,9 @@ export const ClassController = (function () {
               console.log(g)
               let answers = await (a.assignmentType == 'Individual'
                 ? AssignmentController.getInstance().getAllIndividualStudentAnswer(a.assignmentId, currentUser.userId)
-                : AssignmentController.getInstance().getAllGroupAnswer(a.assignmentId, await g.groupId))
+                : g != null
+                ? AssignmentController.getInstance().getAllGroupAnswer(a.assignmentId, await g.groupId)
+                : [])
               console.log(a.title + ' - ' + answers)
               // if (a.assignmentType == 'Individual') {
               //   answers = await AssignmentController.getInstance().getAllIndividualStudentAnswer(a.assignmentId, currentUser.userId)

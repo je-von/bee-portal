@@ -21,15 +21,20 @@ export const routes = [
     link: './course/view.html',
     roles: ['Academic Department'],
   },
-  {
-    name: 'View Score',
-    link: '',
-    roles: ['Student', 'Lecturer', 'Scoring Department'],
-  },
+  // {
+  //   name: 'View Score',
+  //   link: '',
+  //   roles: ['Student', 'Lecturer', 'Scoring Department'],
+  // },
   {
     name: 'Learning Report',
     link: './report/export.html',
     roles: ['Student'],
+  },
+  {
+    name: 'Manage Curriculum',
+    link: './curriculum/view.html',
+    roles: ['Academic Department'],
   },
 ]
 

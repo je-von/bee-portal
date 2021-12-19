@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs, doc, getDoc, getFirestore } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
+import { collection, query, where, getDocs, doc, getDoc, getFirestore, orderBy } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
 
 export class Major {
@@ -18,5 +18,25 @@ export class Major {
       major = new Major(docSnap.id, data['name'], data['totalCredits'])
     }
     return major
+  }
+
+  static async getAll() {
+    try {
+      const q = query(collection(Database.getDB(), 'majors'), orderBy('name', 'asc'))
+      const querySnapshot = await getDocs(q)
+      const majors = []
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(async (doc) => {
+          const data = doc.data()
+          const m = new Major(doc.id, data['name'], data['totalCredits'])
+          majors.push(m)
+        })
+      }
+
+      return majors
+    } catch (e) {
+      console.log(e)
+      return null
+    }
   }
 }
