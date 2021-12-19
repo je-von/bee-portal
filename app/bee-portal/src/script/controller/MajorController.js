@@ -1,6 +1,7 @@
 import { Major } from '../model/major.js'
 import { Curriculum } from '../model/Curriculum.js'
 import { CourseController } from './CourseController.js'
+import { dialogs } from '../util/Utility.js'
 //singleton
 export const MajorController = (function () {
   var instance
@@ -27,7 +28,8 @@ export const MajorController = (function () {
         clone.querySelector('#total-credits').textContent = major.totalCredits + ' Credits'
 
         const curr = await Curriculum.getAll(majorId)
-        curr.forEach(async (c) => {
+
+        for (const c of curr) {
           let semesterContainer = clone.querySelector('#accordion')
           let semesterTemplate = clone.querySelector('#semester-template')
 
@@ -37,6 +39,8 @@ export const MajorController = (function () {
           semesterClone.querySelector('#semester-num').setAttribute('data-target', '#semester' + c.semester)
 
           semesterClone.querySelector('#semester-content').setAttribute('id', 'semester' + c.semester)
+
+          semesterClone.querySelector('#add-course-btn').setAttribute('href', './update.html?id=' + c.curriculumId)
 
           console.log(c.courseIds)
           for (const co of c.courseIds) {
@@ -54,6 +58,70 @@ export const MajorController = (function () {
 
           semesterContainer.appendChild(semesterClone)
           console.log(c.semester)
+        }
+
+        clone.getElementById('add-semester-btn').addEventListener('click', async () => {
+          dialogs.prompt('Input semester', (text) => {
+            if (text != null) {
+              let sem = parseInt(text)
+              if (!sem) {
+                dialogs.alert('Semester must be integer')
+              } else {
+                this.insertCurriculum(majorId, sem)
+              }
+            }
+          })
+        })
+
+        container.appendChild(clone)
+
+        document.querySelector('#loading-spinner').remove()
+      },
+
+      insertCurriculum: async function (majorId, semester) {
+        let c = new Curriculum('', majorId, semester)
+        let success = await c.insert()
+
+        if (success) {
+          dialogs.alert('Create success!', () => {
+            location.reload()
+          })
+        } else {
+          dialogs.alert('Create error!')
+        }
+      },
+
+      showUpdateCurriculumPage: async function (curriculumId) {
+        const c = await Curriculum.get(curriculumId)
+        const major = await Major.get(c.majorId)
+        let template = document.getElementById('template')
+        let container = document.getElementById('container')
+        const clone = template.content.cloneNode(true)
+
+        // const course = await CourseController.getInstance().getCourseById(c.courseCode)
+
+        clone.querySelector('#semester-num').textContent = c.semester
+        clone.querySelector('#major-name').textContent = major.name
+        // clone.querySelector('#class-code').textContent = c.classCode
+
+        // let lecturers = await UserController.getInstance().getAllUsersByRole('Lecturer')
+        // lecturers.forEach((l) => {
+        //   let opt = document.createElement('option')
+        //   opt.setAttribute('value', l.userId)
+        //   if (c.lecturerId == l.userId) opt.setAttribute('selected', 'selected')
+        //   opt.textContent = l.lecturerCode + ' - ' + l.name
+        //   clone.querySelector('#class-lecturer').appendChild(opt)
+        // })
+
+        let courses = await CourseController.getInstance().getAllCourses()
+
+        courses.forEach(async (co) => {
+          let opt = document.createElement('option')
+          opt.setAttribute('value', co.courseCode)
+          if (c.courseIds.includes(co.courseCode)) opt.setAttribute('selected', 'selected')
+
+          opt.textContent = co.courseCode + ' - ' + co.name
+          clone.querySelector('#course-list').appendChild(opt)
         })
 
         container.appendChild(clone)

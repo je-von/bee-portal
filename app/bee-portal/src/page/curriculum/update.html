@@ -23,9 +23,9 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-default d-flex">
       <div class="container">
         <div class="navbar-header d-flex">
-          <a href="../home.html" class="navbar-brand d-flex" style="margin-right: 30px"
-            ><img src="../../logo/bee.png" class="mr-2" style="height: 30px" alt="" /><b>bee-<i>portal</i></b></a
-          >
+          <a href="../home.html" class="navbar-brand d-flex" style="margin-right: 30px">
+            <img src="../../logo/bee.png" class="mr-2" style="height: 30px" alt="" /><b>bee-<i>portal</i></b>
+          </a>
         </div>
 
         <div class="" id="">
@@ -42,61 +42,29 @@
       <template id="template">
         <button class="btn btn-outline-secondary ml-3 back-button" onclick="history.back()">&#8249;</button>
         <div class="d-flex align-items-center flex-column">
-          <h2 id="major-name">Major</h2>
-          <p class="m-0"><i class="fas fa-newspaper mr-3"></i><label id="total-credits">2</label></p>
-        </div>
+          <h2>Update Semester <label id="semester-num">1</label></h2>
+          <h3 id="major-name" class="w-75 text-center">Major Name</h3>
 
-        <div class="ml-5 mr-5">
-          <div class="text-center m-2">
-            <button class="btn btn-outline-success" id="add-semester-btn">Add Semester</button>
-          </div>
-          <div id="accordion">
-            <template id="semester-template">
-              <div class="card">
-                <div class="card-header" id="headingTwo">
-                  <h5 class="mb-0 d-flex justify-content-between">
-                    <button id="semester-num" class="btn btn-link collapsed" data-toggle="collapse" data-target="#semester1" aria-expanded="false">
-                      Semester 1
-                    </button>
-                    <a
-                      class="btn btn-outline-dark"
-                      id="add-course-btn"
-                      data-toggle="tooltip"
-                      data-placement="bottom"
-                      title=""
-                      data-original-title="Add Course"
-                    >
-                      <i class="far fa-plus"></i>
-                    </a>
-                  </h5>
-                </div>
-                <div id="semester-content" class="collapse" data-parent="#accordion">
-                  <div class="card-body p-0">
-                    <table class="table table-sm">
-                      <thead>
-                        <tr>
-                          <th scope="col" class="w-75">Course</th>
-                          <th scope="col">Credits</th>
-                        </tr>
-                      </thead>
-                      <tbody id="course-container">
-                        <template id="course-template">
-                          <tr>
-                            <td id="course-name">asdf</td>
-                            <td id="course-credits">2</td>
-                          </tr>
-                        </template>
-                      </tbody>
-                    </table>
+          <div class="card mt-3" style="width: 90vw" id="reply-container">
+            <div class="card-body">
+              <div class="d-flex">
+                <div class="flex-fill">
+                  <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="">Course</span>
+                    </div>
+                    <select multiple="" class="form-control" id="course-list" size="10"></select>
                   </div>
+
+                  <button type="submit" class="btn btn-outline-success" id="update-btn">Update</button>
                 </div>
               </div>
-            </template>
+            </div>
           </div>
         </div>
       </template>
     </div>
-    <nav class="navbar navbar-dark text-white bg-default fixed-bottom">
+    <nav class="navbar navbar-dark bg-default text-white fixed-bottom">
       <div class="container">
         <div>© 2021 | JV</div>
       </div>
@@ -106,14 +74,28 @@
   <script type="module">
     import { UserController } from '../../script/controller/usercontroller.js'
     import { MajorController } from '../../script/controller/majorcontroller.js'
+
     window.onload = async () => {
       try {
         const u = await UserController.getInstance().getUserById(localStorage.getItem('currentUser'))
         document.getElementById('welcome-txt').appendChild(document.createTextNode(u.name))
-        const majorId = new URLSearchParams(window.location.search).get('id')
-        console.log(majorId)
+        const curriculumId = new URLSearchParams(window.location.search).get('id')
+        await MajorController.getInstance().showUpdateCurriculumPage(curriculumId)
 
-        await MajorController.getInstance().showMajorDetailPage(majorId)
+        // document.getElementById('update-btn').addEventListener('click', async () => {
+        //   console.log('klik')
+        //   let students = [...document.getElementById('class-students').selectedOptions].map((opt) => opt.value)
+        //   console.log(students)
+        //   await ClassController.getInstance().allocateLecturerAndStudents(classId, document.getElementById('class-lecturer').value, students)
+        //   const f = await ForumController.getInstance().insertForumThread(
+        //     classId,
+        //     u.userId,
+        //     document.getElementById('forum-title').value,
+        //     document.getElementById('forum-content').value,
+        //     document.getElementById('forum-hide-check').checked
+        //   )
+        //   console.log(f)
+        // })
       } catch (e) {
         console.log(e)
       }
@@ -121,9 +103,6 @@
   </script>
   <script>
     window.jQuery = window.$ = require('jquery')
-    $(document).ready(function () {
-      $('body').tooltip({ selector: '[data-toggle=tooltip]' })
-    })
   </script>
   <script
     src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"

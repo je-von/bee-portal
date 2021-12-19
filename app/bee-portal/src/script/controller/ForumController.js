@@ -62,7 +62,8 @@ export const ForumController = (function () {
 
         if (!forum.isReplyHidden) {
           const replies = await this.getAllForumReply(forumId)
-          replies.forEach(async (r) => {
+
+          for (const r of replies) {
             let replyContainer = clone.querySelector('#reply-container')
             let replyTemplate = clone.querySelector('#reply-template')
             let replyClone = replyTemplate.content.cloneNode(true)
@@ -88,7 +89,7 @@ export const ForumController = (function () {
             }
 
             replyContainer.appendChild(replyClone)
-          })
+          }
         } else {
           let i = document.createElement('i')
           i.setAttribute('class', 'far fa-eye-slash mr-3')

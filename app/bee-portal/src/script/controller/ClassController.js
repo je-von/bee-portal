@@ -126,7 +126,8 @@ export const ClassController = (function () {
 
           const forums = await ForumController.getInstance().getAllForumThread(classId)
           // console.log(forums)
-          forums.forEach(async (f) => {
+
+          for (const f of forums) {
             let forumContainer = clone.getElementById('forum')
             let template = clone.getElementById('forum-template')
 
@@ -142,7 +143,7 @@ export const ClassController = (function () {
             forumClone.querySelector('#forum-link').setAttribute('href', '../forum/detail.html?id=' + f.forumId)
 
             forumContainer.appendChild(forumClone)
-          })
+          }
 
           //group tab
           if (currentUser.role !== 'Lecturer') {
