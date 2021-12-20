@@ -44,6 +44,29 @@ export class Attendance {
     }
   }
 
+  static async getAllByClassStudent(classId, studentId) {
+    try {
+      const q = query(
+        collection(Database.getDB(), 'attendances'),
+        where('classId', '==', doc(Database.getDB(), 'classes', classId)),
+        where('studentId', '==', doc(Database.getDB(), 'users', studentId))
+      )
+      const querySnapshot = await getDocs(q)
+      const att = []
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(async (doc) => {
+          const data = doc.data()
+          att.push(new Attendance(doc.id, data['classId'].id, data['studentId'].id, data['session'], data['isPresent']))
+        })
+      }
+      //   console.log(att)
+      return att
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
+
   async insert() {
     try {
       const docRef = await addDoc(collection(Database.getDB(), 'attendances'), {

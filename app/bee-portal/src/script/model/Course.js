@@ -52,4 +52,11 @@ export class Course {
       return false
     }
   }
+
+  calculateCreditsAndAbsence() {
+    let totalSession = this.creditsPerSemester * 6
+    let absenceLimit = this.creditsPerSemester * 2
+
+    return { totalSession, absenceLimit }
+  }
 }

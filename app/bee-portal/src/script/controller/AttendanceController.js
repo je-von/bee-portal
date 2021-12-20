@@ -9,7 +9,9 @@ export const AttendanceController = (function () {
       getAllAttendanceByClassSession: function (classId, session) {
         return Attendance.getAllByClassSession(classId, session)
       },
-
+      getAllAttendanceByClassStudent: function (classId, studentId) {
+        return Attendance.getAllByClassStudent(classId, studentId)
+      },
       showAttendancePage: async function (classId, session) {
         const c = await ClassController.getInstance().getClassById(classId)
         const att = await this.getAllAttendanceByClassSession(classId, session)

@@ -9,6 +9,7 @@ import { days, shifts, dialogs } from '../util/Utility.js'
 import { StudentGroup } from '../model/StudentGroup.js'
 import { AssignmentController } from './AssignmentController.js'
 import { StudentGroupController } from './StudentGroupController.js'
+import { AttendanceController } from './AttendanceController.js'
 
 // import { IndividualAnswer } from '../model/AssignmentAnswer.js'
 
@@ -179,8 +180,11 @@ export const ClassController = (function () {
           })
 
           //attendance tab
+          let { totalSession, absenceLimit } = course.calculateCreditsAndAbsence()
+
           if (currentUser.role == 'Lecturer') {
-            for (let i = 1; i <= 13; i++) {
+            clone.querySelector('#student-attendance').remove()
+            for (let i = 1; i <= totalSession; i++) {
               let sessionContainer = clone.querySelector('#attendance-session-container')
               let sessionTemplate = clone.querySelector('#attendance-session-template')
 
@@ -190,6 +194,35 @@ export const ClassController = (function () {
               sessionClone.querySelector('#session-num').setAttribute('href', '../attendance/view.html?id=' + classId + '&session=' + i)
               sessionContainer.appendChild(sessionClone)
             }
+          } else {
+            const att = await AttendanceController.getInstance().getAllAttendanceByClassStudent(classId, currentUser.userId)
+            let absence = 0
+            for (let i = 1; i <= totalSession; i++) {
+              let sessionContainer = clone.querySelector('#student-attendance-container')
+              let sessionTemplate = clone.querySelector('#student-attendance-template')
+
+              let sessionClone = sessionTemplate.content.cloneNode(true)
+
+              sessionClone.querySelector('#session-num').textContent = 'Session ' + i
+
+              let studentAttendance = att.find((a) => a.session == i)
+              if (studentAttendance) {
+                let s = sessionClone.querySelector('#attendance-status')
+                if (studentAttendance.isPresent) {
+                  s.textContent = 'Present'
+                  s.setAttribute('class', 'text-success')
+                } else {
+                  s.textContent = 'Absent'
+                  s.setAttribute('class', 'text-danger')
+                  absence++
+                }
+              }
+
+              sessionContainer.appendChild(sessionClone)
+            }
+
+            clone.querySelector('#total-absence').textContent = absence
+            clone.querySelector('#absence-limit').textContent = absenceLimit
           }
 
           //assignment tab

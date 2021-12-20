@@ -160,6 +160,38 @@
                   <a href="" class="list-group-item list-group-item-action" id="session-num">Session 1</a>
                 </template>
               </div>
+              <div id="student-attendance">
+                <div class="d-flex">
+                  <div class="mr-5"><b>Total Absence: </b><label id="total-absence">1</label></div>
+                  <div><b>Absence Limit: </b><label id="absence-limit">1</label></div>
+                </div>
+                <table class="table">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Session</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="student-attendance-container">
+                    <!-- loop people -->
+                    <template id="student-attendance-template">
+                      <tr>
+                        <th scope="row" id="session-num">Session 1</th>
+                        <td id="attendance-status">-</td>
+                      </tr>
+                      <!-- <tr>
+                      <th scope="row">Session 1</th>
+                      <td class="text-success">Present</td>
+                    </tr> -->
+                    </template>
+                    <!-- end loop -->
+                    <!-- <tr>
+                      <th scope="row">Session 2</th>
+                      <td class="text-danger">Absent</td>
+                    </tr> -->
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div class="tab-pane fade" id="assignment" role="tabpanel" aria-labelledby="assignment-tab">
               <a href="" class="btn btn-outline-success mt-3" id="create-assignment-btn">Create New Assignment</a>
