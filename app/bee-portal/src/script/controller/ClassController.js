@@ -236,7 +236,7 @@ export const ClassController = (function () {
 
           // console.log(a)
           let j = 0
-          asg.forEach(async (a) => {
+          for (const a of asg) {
             j++
             let assignmentContainer = clone.getElementById('assignment')
             let template = clone.getElementById('assignment-template')
@@ -314,7 +314,7 @@ export const ClassController = (function () {
             }
 
             assignmentContainer.appendChild(assignmentClone)
-          })
+          }
         }
 
         //people tab
