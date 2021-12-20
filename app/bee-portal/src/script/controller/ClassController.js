@@ -178,6 +178,20 @@ export const ClassController = (function () {
             i++
           })
 
+          //attendance tab
+          if (currentUser.role == 'Lecturer') {
+            for (let i = 1; i <= 13; i++) {
+              let sessionContainer = clone.querySelector('#attendance-session-container')
+              let sessionTemplate = clone.querySelector('#attendance-session-template')
+
+              let sessionClone = sessionTemplate.content.cloneNode(true)
+
+              sessionClone.querySelector('#session-num').textContent = 'Session ' + i
+              sessionClone.querySelector('#session-num').setAttribute('href', '../attendance/view.html?id=' + classId + '&session=' + i)
+              sessionContainer.appendChild(sessionClone)
+            }
+          }
+
           //assignment tab
           if (currentUser.role == 'Lecturer') {
             clone.querySelector('#create-assignment-btn').setAttribute('href', '../assignment/insert.html?id=' + classId)
