@@ -82,20 +82,11 @@
         const curriculumId = new URLSearchParams(window.location.search).get('id')
         await MajorController.getInstance().showUpdateCurriculumPage(curriculumId)
 
-        // document.getElementById('update-btn').addEventListener('click', async () => {
-        //   console.log('klik')
-        //   let students = [...document.getElementById('class-students').selectedOptions].map((opt) => opt.value)
-        //   console.log(students)
-        //   await ClassController.getInstance().allocateLecturerAndStudents(classId, document.getElementById('class-lecturer').value, students)
-        //   const f = await ForumController.getInstance().insertForumThread(
-        //     classId,
-        //     u.userId,
-        //     document.getElementById('forum-title').value,
-        //     document.getElementById('forum-content').value,
-        //     document.getElementById('forum-hide-check').checked
-        //   )
-        //   console.log(f)
-        // })
+        document.getElementById('update-btn').addEventListener('click', async () => {
+          let courses = [...document.getElementById('course-list').selectedOptions].map((opt) => opt.value)
+          console.log(courses)
+          await MajorController.getInstance().updateCurriculum(curriculumId, courses)
+        })
       } catch (e) {
         console.log(e)
       }

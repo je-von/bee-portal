@@ -9,6 +9,7 @@ import {
   getDoc,
   getFirestore,
   Timestamp,
+  updateDoc,
   orderBy,
 } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 import { Database } from '../util/Database.js'
@@ -64,6 +65,19 @@ export class Curriculum {
         semester: this.semester,
       })
       this.curriculumId = docRef.id
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  async update() {
+    try {
+      await updateDoc(doc(Database.getDB(), 'curriculums', this.curriculumId), {
+        courseIds: this.courseIds.map((c) => doc(Database.getDB(), 'courses', c)),
+      })
+
       return true
     } catch (e) {
       console.log(e)

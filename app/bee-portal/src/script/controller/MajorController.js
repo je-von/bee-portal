@@ -98,20 +98,8 @@ export const MajorController = (function () {
         let container = document.getElementById('container')
         const clone = template.content.cloneNode(true)
 
-        // const course = await CourseController.getInstance().getCourseById(c.courseCode)
-
         clone.querySelector('#semester-num').textContent = c.semester
         clone.querySelector('#major-name').textContent = major.name
-        // clone.querySelector('#class-code').textContent = c.classCode
-
-        // let lecturers = await UserController.getInstance().getAllUsersByRole('Lecturer')
-        // lecturers.forEach((l) => {
-        //   let opt = document.createElement('option')
-        //   opt.setAttribute('value', l.userId)
-        //   if (c.lecturerId == l.userId) opt.setAttribute('selected', 'selected')
-        //   opt.textContent = l.lecturerCode + ' - ' + l.name
-        //   clone.querySelector('#class-lecturer').appendChild(opt)
-        // })
 
         let courses = await CourseController.getInstance().getAllCourses()
 
@@ -127,6 +115,19 @@ export const MajorController = (function () {
         container.appendChild(clone)
 
         document.querySelector('#loading-spinner').remove()
+      },
+
+      updateCurriculum: async function (curriculumId, courseIds) {
+        let c = new Curriculum(curriculumId, '', '', courseIds)
+        let success = await c.update()
+
+        if (success) {
+          dialogs.alert('Update Success!', () => {
+            history.back()
+          })
+        } else {
+          dialogs.alert('Update error!')
+        }
       },
     }
   }
