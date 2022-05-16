@@ -47,6 +47,7 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "dialogs": "^2.0.1",
+    "dotenv": "^16.0.1",
     "electron-squirrel-startup": "^1.0.0",
     "faker": "^5.5.3",
     "jquery": "^3.6.0",

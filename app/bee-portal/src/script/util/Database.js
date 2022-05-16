@@ -1,111 +1,22 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js'
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc,
-  addDoc,
-  getFirestore,
-  updateDoc,
-} from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
-// import { getFunctions } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-functions.js'
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js'
 
 //Singleton
 export const Database = (function () {
   var db
 
   function create() {
+    require('dotenv').config()
     const firebaseApp = initializeApp({
-      apiKey: 'AIzaSyCfP4MYBzuwRNNb_aBjE8zGxDFfex86upk',
-      authDomain: 'bee-portal-jv.firebaseapp.com',
-      projectId: 'bee-portal-jv',
-      storageBucket: 'bee-portal-jv.appspot.com',
-      messagingSenderId: '3478890079',
-      appId: '1:3478890079:web:958bb067358f1e91f9ddea',
-      measurementId: 'G-RQH3850JL4',
+      apiKey: process.env.API_KEY,
+      authDomain: process.env.AUTH_DOMAIN,
+      projectId: process.env.PROJECT_ID,
+      storageBucket: process.env.STORAGE_BUCKET,
+      messagingSenderId: process.env.MESSAGING_SENDER_ID,
+      appId: process.env.API_ID,
+      measurementId: process.env.MEASUREMENT_ID,
     })
     db = getFirestore(firebaseApp)
-    // console.log(getFunctions())
-    // const bcrypt = require('bcrypt-nodejs')
-    // var salt = bcrypt.genSaltSync(10)
-    // const hash = bcrypt.hashSync('kobe123', salt)
-    // console.log(hash)
-    // seedUsers()
-
-    // const docRef = addDoc(collection(db, 'tes'), {
-    //   name: 'asd',
-    //   user: doc(Database.getDB(), 'users', '1Niqlyc6RCp2r83Sof7O'),
-    // })
-
-    // const q = query(collection(Database.getDB(), 'users'), where('role', '==', 'Student'))
-
-    // const querySnapshot = await getDocs(q)
-    // if (!querySnapshot.empty) {
-    //   let i = 1
-    //   querySnapshot.forEach((docSnap) => {
-    //     updateDoc(doc(Database.getDB(), 'users', docSnap.id), { major: doc(Database.getDB(), 'majors', 'wHKrYgwgLO6DxXtX2CuP') })
-    //   })
-    // }
-    // console.log('done')
-
-    // const querySnapshot = await getDocs(q)
-    // if (!querySnapshot.empty) {
-    //   const users = []
-    //   let i = 1
-    //   querySnapshot.forEach((docSnap) => {
-    //     if (i % 2 == 0 || i % 3 == 0) users.push(doc(Database.getDB(), 'users', docSnap.id))
-    //     i++
-    //   })
-    //   const docRef = addDoc(collection(db, 'classes'), {
-    //     classCode: 'LP01',
-    //     course: doc(Database.getDB(), 'courses', 'CHAR6015'),
-    //     students: users,
-    //     lecturer: doc(Database.getDB(), 'users', 'VTzRIQwvIItl2MMTeJvj'),
-    //     day: 6,
-    //     shift: 3,
-    //     runningPeriod: { year: 2021, semester: 'Odd' },
-    //   })
-    //   console.log('berhasil')
-    // }
-  }
-
-  function seedUsers() {
-    const faker = require('faker')
-    const bcrypt = require('bcrypt-nodejs')
-
-    // var salt = bcrypt.genSaltSync(10)
-    // const hash = bcrypt.hashSync('jevon123', salt)
-    // const docRef = addDoc(collection(db, 'users'), {
-    //   name: 'Jevon Levin',
-    //   password: hash,
-    //   email: 'jevon.levin@slc.ac.id',
-    //   role: 'Student',
-    //   enrolledYear: 2020,
-    //   NIM: 2440013600,
-    // })
-
-    // loop sbyk data yg mau dicreate
-    for (let i = 0; i < 5; i++) {
-      const firstName = faker.name.firstName()
-      const lastName = faker.name.lastName()
-
-      //passwordnya firstname123 trs dihash
-      const salt = bcrypt.genSaltSync(10)
-      const originalPassword = firstName.toLowerCase() + '123'
-      const hashedPassword = bcrypt.hashSync(originalPassword, salt)
-
-      const docRef = addDoc(collection(db, 'users'), {
-        name: firstName + ' ' + lastName,
-        password: hashedPassword,
-        email: firstName.toLowerCase() + '.' + lastName.toLowerCase() + '@slc.edu', //.edu or .ac.id
-        role: 'Academic Department',
-        // lecturerCode: 'D' + faker.datatype.number({ min: 1000, max: 9999 }),
-        // enrolledYear: 2019, //2019 2020 2021
-        // NIM: faker.datatype.number({ min: 2300000000, max: 2399999999 }), //23 24 25
-      })
-    }
   }
 
   return {
