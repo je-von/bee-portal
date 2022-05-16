@@ -1,5 +1,5 @@
 # bee-portal
-:bee:bee-portal (a desktop app for Learning Management System) with **Electron JS** including features like managing classes, courses, attendance, scores for lecturer, students, and other university's department. **Firebase** was also used as this project's main database.
+:bee:bee-portal is a desktop app for Learning Management System created with **Electron JS** including features like managing classes, courses, attendance, scores for lecturer, students, and other university's department. **Firestore** (Firebase) was also used as this project's main database.
 
 <h3 align="center">:globe_with_meridians:Download and install this app on your desktop <a href="https://github.com/je-von/bee-portal/raw/master/bee_portal_installer_v1.2.exe">here</a>.</h3>
 For testing, you may use the following credentials:
@@ -15,5 +15,5 @@ npm start
 ```
 Make sure to set up the environment variables by creating .env file and copy the content from .env.example
 
-:eye:Application preview:
+👁️‍🗨️Application preview:
 ![bee](https://user-images.githubusercontent.com/86874779/168550403-e8e6fd77-915b-48bc-b488-7312f08da149.png)
